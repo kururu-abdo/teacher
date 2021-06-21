@@ -425,10 +425,10 @@ class _HomeState extends State<Home>{
                 ),
                 onTap: () async {
                
-var future = await   showLoadingDialog();
-
+//var future = await   showLoadingDialog();
+LoadingDialog.show(context);
 Future.delayed(Duration(seconds: 5) ,   (){
-future.dismiss();
+LoadingDialog.hide(context);
 FCMConfig.subscripeToTopic(teacher.id);
 getStorage.write('isLogged', false);
 

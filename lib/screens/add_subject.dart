@@ -58,7 +58,10 @@ class _NewLectureState extends State<NewLecture> {
             TextFormField(
               controller: titleController,
               maxLines: 3,
-              decoration: InputDecoration(labelText: 'عنوان المحاضرة' ,
+              decoration: InputDecoration(
+                labelText: 'عنوان المحاضرة' ,
+                labelStyle:   TextStyle(color: Colors.white),
+                  hintStyle: TextStyle(color: Colors.white),
                  enabledBorder: UnderlineInputBorder(),
                  border: UnderlineInputBorder()
               

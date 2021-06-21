@@ -75,7 +75,8 @@ class _NewLectureState extends State<NewEvent> {
 
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(8.0),
-                    labelText: 'text...',
+                    labelText: 'الخبر...',
+                    hintStyle: TextStyle(color: Colors.white),
                     enabledBorder: new UnderlineInputBorder(
                         borderSide: new BorderSide(color: Colors.blue)),
                     focusedBorder: UnderlineInputBorder(

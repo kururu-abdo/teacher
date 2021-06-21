@@ -104,7 +104,9 @@ class _LoginFormState extends State<LoginForm>  {
                             LoadingDialog.hide(context);
                     
                             Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text(state.failureResponse)));
+                                SnackBar(
+                                  backgroundColor: Colors.yellow,
+                                  content: Text(state.failureResponse ,  style: TextStyle(color: Colors.blue),)));
                           },
                           child: SingleChildScrollView(
                             physics: ClampingScrollPhysics(),
