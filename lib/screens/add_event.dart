@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:teacher_side/bloc/services_provider.dart';
 import 'package:teacher_side/models/dept.dart';
 import 'package:teacher_side/models/level.dart';
+import 'package:teacher_side/screens/login/login_view.dart';
 import 'package:teacher_side/utils/backendless_init.dart';
 import 'package:teacher_side/utils/constants.dart';
 import 'package:teacher_side/utils/ui/custom_tween.dart';
@@ -310,8 +311,7 @@ Spacer()
                     borderRadius: BorderRadius.all(Radius.circular(10.0))),
                 onPressed: () async {
                        if (await service_provider.checkInternet()) {
-                    var future = await showLoadingDialog();
-
+                  LoadingDialog.show(context);
                     //await upload files then send data to firebase
 
                     await UploadFilesToBackendless();
@@ -359,7 +359,7 @@ Spacer()
 
                     // .catchError((error) => print("Failed to add user: $error"));
 
-                    future.dismiss();
+                  LoadingDialog.hide(context);
 
                     Get.back();
                   } else {

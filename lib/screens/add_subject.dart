@@ -17,6 +17,7 @@ import 'package:teacher_side/bloc/services_provider.dart';
 import 'package:teacher_side/models/dept.dart';
 import 'package:teacher_side/models/level.dart';
 import 'package:teacher_side/models/subject.dart';
+import 'package:teacher_side/screens/login/login_view.dart';
 import 'package:teacher_side/utils/backendless_init.dart';
 import 'package:teacher_side/utils/constants.dart';
 import 'package:teacher_side/utils/fcm_config.dart';
@@ -299,7 +300,7 @@ Spacer() ,
                 onTap: () async{
 
               if (await serviceProvider.checkInternet()) {
-                  var future = await showLoadingDialog();
+                LoadingDialog.show(context);
 
                   await UploadFilesToBackendless();
 //
@@ -339,7 +340,7 @@ Spacer() ,
                   print(notification);
 
                   Get.back();
-                  future.dismiss();
+                   LoadingDialog.hide(context);
                 } else {
                   Fluttertoast.showToast(
                       msg: "تأكد من اتصال البيانات",
