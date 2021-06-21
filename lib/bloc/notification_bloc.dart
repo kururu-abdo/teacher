@@ -1,0 +1,9 @@
+class NotificationBloc{
+List notifications =[];
+
+
+
+
+
+
+}
