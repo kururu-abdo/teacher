@@ -170,7 +170,7 @@ class _LectureDisscusionState extends State<LectureDisscusion> {
               ),
             ),
             SizedBox(height: 10.0),
-            Text('التعليقات...'    ,   style: TextStyle(color:Colors.white), ),
+            Text('التعليقات...'    ,   style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height :  10.0) ,
             Container(
               height: MediaQuery.of(context).size.height * 2 / 3,
@@ -236,7 +236,7 @@ class _LectureDisscusionState extends State<LectureDisscusion> {
             maxLines:   5,
             decoration: InputDecoration(
                 icon: IconButton(
-                    icon: Icon(Icons.comment ,   color: Colors.white,),
+                    icon: Icon(Icons.comment ,   color: Colors.blue,),
                     onPressed: () async {
                       var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
                       await comments.add({
@@ -254,7 +254,7 @@ class _LectureDisscusionState extends State<LectureDisscusion> {
                       controller.text = '';
                       print('comment');
                     }),
-                hintText: 'تعليق...' ,   hintStyle: TextStyle(color: Colors.white)),
+                hintText: 'تعليق...' ,   hintStyle: TextStyle(color: Colors.black)),
           ),
         ));
   }

@@ -27,9 +27,9 @@ class SubjectDetails extends StatefulWidget {
 }
 
 class _SubjectDetailsState extends State<SubjectDetails> {
-   final pageKey = RipplePage.createGlobalKey();
+  final pageKey = RipplePage.createGlobalKey();
   final effectKey = RippleEffect.createGlobalKey();
-    final effectKey2 = RippleEffect.createGlobalKey();
+  final effectKey2 = RippleEffect.createGlobalKey();
 
   @override
   void initState() {
@@ -66,140 +66,173 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   //   debugPrint(snapshot.data.docs.length.toString());
-    
+
                   if (snapshot.hasError) {
                     return Text('Something went wrong');
                   }
-    
+
                   if (snapshot.hasData) {
                     return ListView(
-                      children:
-                          snapshot.data.docs.asMap().map((
-                            i,
-                            DocumentSnapshot document , ) {
-                            
-                        return 
-                        MapEntry(i,
-                        Container(
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) =>
-                                      LectureDisscusion(document.data())));
-                            },
-                            child: SwipeActionCell(
-                              key: ObjectKey(document.data()['id']),
-                              performsFirstActionWithFullSwipe: true,
-                              trailingActions: <SwipeAction>[
-                                SwipeAction(
-                                    title: "حذف",
-                                    onTap: (CompletionHandler handler) async {
-                                      await handler(true);
-    
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) => AlertDialog(
-                                                title: Text('Delete'),
-                                                content: Text(
-                                                    'Are you to delete lecture?'),
-                                                actions: <Widget>[
-                                                  FlatButton(
-                                                    color: Colors.red,
-                                                    textColor: Colors.white,
-                                                    child: Text('cancel'),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        //  codeDialog = valueText;
-                                                        Navigator.pop(context);
-                                                      });
-                                                    },
-                                                  ),
-                                                  FlatButton(
-                                                    color: Colors.green,
-                                                    textColor: Colors.white,
-                                                    child: Text('OK'),
-                                                    onPressed: () async {
-                                                      setState(() {});
-                                                      CollectionReference
-                                                          lectures =
-                                                          FirebaseFirestore
-                                                              .instance
-                                                              .collection(
-                                                                  'lectures');
-    
-                                                      var lecture = await lectures
-                                                          .where('id',
-                                                              isEqualTo: document
-                                                                  .data()['id'])
-                                                          .get();
-                                                      var doc_id =
-                                                          lecture.docs.first.id;
-                                                      await lectures
-                                                          .doc(doc_id)
-                                                          .delete();
-    
-                                                      // await updateAddress();
-                                                      setState(() {
-                                                        //  codeDialog = valueText;
-                                                        Navigator.pop(context);
-                                                      });
-                                                    },
-                                                  ),
-                                                ],
-                                              ));
-                                      setState(() {});
-                                    },
-                                    color: Colors.red),
-                                SwipeAction(
-                                    title: "تعديل",
-                                    onTap: (CompletionHandler handler) async {
-                                      await handler(true);
-                                      Navigator.of(context)
-                                          .push(HeroDialogRoute(builder: (_) {
-                                        return EditLecture(new Lecture(
-                                            document.data()['id'],
-                                            document.data()['name'],
-                                            document.data()['files'],
-                                            ClassSubject.fromJson(
-                                                document.data()['subject']),
-                                            document.data()['time']));
-                                      }));
-    
-    // setState(() {
-    
-    // });
-                                    },
-                                    color: Colors.green)
-                              ],
-                              child: Card(
-                                
-                                margin: EdgeInsets.only(bottom: 8.0),
-                                elevation: 2.0,
-                                // color: Colors.yellow,
-                                child: new ListTile(
-                                  leading: Container(
-                                    color:Colors.grey ,
-                                    child : Text(i.toString())
-                                  ),
-                                  title: new Text(
-                                    document.data()['name'],
-                                    style: TextStyle(color: Color(0xFF0336FE)),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          )
-                        );
-                      }).values.toList()
-                    );
+                        children: snapshot.data.docs
+                            .asMap()
+                            .map((
+                              i,
+                              DocumentSnapshot document,
+                            ) {
+                              return MapEntry(
+                                  i,
+                                  Container(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    LectureDisscusion(
+                                                        document.data())));
+                                      },
+                                      child: SwipeActionCell(
+                                        key: ObjectKey(document.data()['id']),
+                                        performsFirstActionWithFullSwipe: true,
+                                        trailingActions: <SwipeAction>[
+                                          SwipeAction(
+                                              title: "حذف",
+                                              onTap: (CompletionHandler
+                                                  handler) async {
+                                                await handler(true);
+
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                          title: Text('Delete'),
+                                                          content: Text(
+                                                              'Are you to delete lecture?'),
+                                                          actions: <Widget>[
+                                                            FlatButton(
+                                                              color: Colors.red,
+                                                              textColor:
+                                                                  Colors.white,
+                                                              child: Text(
+                                                                  'cancel'),
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  //  codeDialog = valueText;
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                });
+                                                              },
+                                                            ),
+                                                            FlatButton(
+                                                              color:
+                                                                  Colors.green,
+                                                              textColor:
+                                                                  Colors.white,
+                                                              child: Text('OK'),
+                                                              onPressed:
+                                                                  () async {
+                                                                setState(() {});
+                                                                CollectionReference
+                                                                    lectures =
+                                                                    FirebaseFirestore
+                                                                        .instance
+                                                                        .collection(
+                                                                            'lectures');
+
+                                                                var lecture =
+                                                                    await lectures
+                                                                        .where(
+                                                                            'id',
+                                                                            isEqualTo:
+                                                                                document.data()['id'])
+                                                                        .get();
+                                                                var doc_id =
+                                                                    lecture
+                                                                        .docs
+                                                                        .first
+                                                                        .id;
+                                                                await lectures
+                                                                    .doc(doc_id)
+                                                                    .delete();
+
+                                                                // await updateAddress();
+                                                                setState(() {
+                                                                  //  codeDialog = valueText;
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                });
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ));
+                                                setState(() {});
+                                              },
+                                              color: Colors.red),
+                                          SwipeAction(
+                                              title: "تعديل",
+                                              onTap: (CompletionHandler
+                                                  handler) async {
+                                                await handler(true);
+                                                Navigator.of(context).push(
+                                                    HeroDialogRoute(
+                                                        builder: (_) {
+                                                  return EditLecture(
+                                                      new Lecture(
+                                                          document.data()['id'],
+                                                          document
+                                                              .data()['name'],
+                                                          document
+                                                              .data()['files'],
+                                                          ClassSubject.fromJson(
+                                                              document.data()[
+                                                                  'subject']),
+                                                          document
+                                                              .data()['time']));
+                                                }));
+
+                                                // setState(() {
+
+                                                // });
+                                              },
+                                              color: Colors.green)
+                                        ],
+                                        child: Card(
+                                          margin: EdgeInsets.only(bottom: 8.0),
+                                          elevation: 2.0,
+                                          // color: Colors.yellow,
+                                          child: new ListTile(
+                                            leading: Container(
+                                                height: 40,
+                                                width: 40,
+                                                child: Center(
+                                                  child: Text(
+                                                      (i + 1).toString(),
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                    color: Colors.blueGrey,
+                                                    shape: BoxShape.circle)),
+                                            title: new Text(
+                                              document.data()['name'],
+                                              style: TextStyle(
+                                                  color: Color(0xFF0336FE)),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ));
+                            })
+                            .values
+                            .toList());
                   }
                   return Text("loading.....");
                 },
               ),
-    
-    //
-    
+
+              //
+
               StreamBuilder<QuerySnapshot>(
                 stream: events
                     .where('subject_id', isEqualTo: widget.subject.id)
@@ -224,15 +257,9 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              color: Colors.blue[100],
-                              boxShadow: [
-                                BoxShadow(blurRadius: 2.0, color: Colors.black),
-                                BoxShadow(blurRadius: 2.0),
-                                BoxShadow(blurRadius: 2.0),
-                                BoxShadow(blurRadius: 2.0)
-                              ]),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                          ),
                           child: Dismissible(
                             background: Container(
                               color: Colors.red,
@@ -267,15 +294,15 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                                                   FirebaseFirestore.instance
                                                       .collection(
                                                           'subject-events');
-    
+
                                               var event = await events
                                                   .where('id',
-                                                      isEqualTo: snapshot
-                                                          .data.docs[index]['id'])
+                                                      isEqualTo: snapshot.data
+                                                          .docs[index]['id'])
                                                   .get();
                                               var doc_id = event.docs.first.id;
                                               await events.doc(doc_id).delete();
-    
+
                                               // await updateAddress();
                                               setState(() {
                                                 //  codeDialog = valueText;
@@ -288,9 +315,19 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                             },
                             key: ObjectKey(snapshot.data.docs[index]['id']),
                             child: Card(
-                              elevation: 8.0,
-                              color: Colors.yellow,
+                              elevation: 2.0,
                               child: ListTile(
+                                leading: Container(
+                                  child: Center(
+                                      child: Text((index + 1).toString(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold))),
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      color: Colors.blueGrey,
+                                      shape: BoxShape.circle),
+                                ),
                                 title: Text(
                                   snapshot.data.docs[index]['name'],
                                   style: TextStyle(color: Color(0xFF0336FE)),
@@ -310,7 +347,7 @@ class _SubjectDetailsState extends State<SubjectDetails> {
               effectKey: effectKey,
               color: Colors.yellow,
               child: SpeedDial(
-                
+
                   /// both default to 16
                   marginEnd: 18,
                   marginBottom: 20,
@@ -329,11 +366,11 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                   /// The below button size defaults to 56 itself, its the FAB size + It also affects relative padding and other elements
                   buttonSize: 56.0,
                   visible: true,
-                
+
                   /// If true user is forced to close dial manually
                   /// by tapping main button and overlay is not rendered.
                   closeManually: false,
-                
+
                   /// If true overlay will render no matter what.
                   renderOverlay: false,
                   curve: Curves.bounceIn,
@@ -356,18 +393,18 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                       backgroundColor: Colors.red,
                       label: 'اضافة محاضرة',
                       labelStyle: TextStyle(fontSize: 18.0),
-                      onTap: () => 
-               RippleEffect.start(effectKey, () => Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) {
-                        return NewLecture(widget.subject);
-                      })
-                       )),       
-                      
+                      onTap: () => RippleEffect.start(
+                          effectKey,
+                          () => Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (_) {
+                                return NewLecture(widget.subject);
+                              }))),
+
                       // Navigator.of(context)
                       //     .push(MaterialPageRoute(builder: (_) {
                       //   return NewLecture(widget.subject);
                       // })
-                      
+
                       // ),
                       onLongPress: () => print('FIRST CHILD LONG PRESS'),
                     ),
@@ -376,37 +413,34 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                       backgroundColor: Colors.red,
                       label: 'اضافة اعلان',
                       labelStyle: TextStyle(fontSize: 18.0),
-                      onTap: () => 
-                       RippleEffect.start(effectKey, () => Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (_) {
-                       return NewEvent(widget.subject.toJson());
-                      })
-                       )),  
-                      
-                      
-
+                      onTap: () => RippleEffect.start(
+                          effectKey,
+                          () => Navigator.of(context)
+                                  .push(MaterialPageRoute(builder: (_) {
+                                return NewEvent(widget.subject.toJson());
+                              }))),
                       onLongPress: () => print('FIRST CHILD LONG PRESS'),
                     ),
                   ]),
             )
-    
-    //    FloatingActionButton(child: Icon(Icons.add), onPressed: (){
-    
-    // Navigator.of(context).push(
-    
-    // HeroDialogRoute(builder: (_){
-    
-    //   return  NewLecture();
-    // })
-    
-    // //   MaterialPageRoute(builder: (_){
-    // // return  NewLecture();
-    // // } ,
-    // // )
-    
-    // );
-    //   },),
-    
+
+            //    FloatingActionButton(child: Icon(Icons.add), onPressed: (){
+
+            // Navigator.of(context).push(
+
+            // HeroDialogRoute(builder: (_){
+
+            //   return  NewLecture();
+            // })
+
+            // //   MaterialPageRoute(builder: (_){
+            // // return  NewLecture();
+            // // } ,
+            // // )
+
+            // );
+            //   },),
+
             ),
       ),
     );

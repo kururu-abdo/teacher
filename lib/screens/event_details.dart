@@ -268,7 +268,7 @@ Align(
   
   
   
-  TextStyle(color: Colors.white),) ,
+  TextStyle(color: Colors.black ,  fontWeight: FontWeight.bold) ),
 Container(
   height: MediaQuery.of(context).size.height*2/3,
   child: FutureBuilder<QuerySnapshot>(
@@ -353,7 +353,7 @@ Container(
     maxLines: 3,
      decoration: InputDecoration(
        
-     icon: IconButton(icon: Icon(Icons.comment ,  color: Colors.white,), onPressed: () async{
+     icon: IconButton(icon: Icon(Icons.comment ,  color: Colors.blue,), onPressed: () async{
 var uuid = Uuid(
     options: {'grng': UuidUtil.cryptoRNG}
 );
@@ -373,7 +373,7 @@ var uuid = Uuid(
      _controller.text='';
         print('comment');
       }),   
-       hintText: 'تعليق...'  ,  hintStyle: TextStyle(color: Colors.white)
+       hintText: 'تعليق...'  ,  hintStyle: TextStyle(color: Colors.black)
      ),
      
    ), 
