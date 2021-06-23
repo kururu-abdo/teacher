@@ -65,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     BackendlessInit().init();
     FirebaseInit.initFirebase();
-  // initializeFlutterFire();
-FCMConfig.fcmConfig();
+    // initializeFlutterFire();
+    FCMConfig.fcmConfig();
     // reg_device();
     // itens.add(new );
 
@@ -77,18 +77,18 @@ FCMConfig.fcmConfig();
     initializeFlutterFire();
     fetch_teacher();
   }
-subscribe(){
-  FCMConfig.subscripeToTopic("teacher"+teacher.id.toString());
-  
-}
+
+  subscribe() {
+    FCMConfig.subscripeToTopic("teacher" + teacher.id.toString());
+  }
+
   Teacher teacher;
   fetch_teacher() async {
     setState(() {
-      debugPrint(json.decode(getStorage.read('teacher')  ).toString());
+      debugPrint(json.decode(getStorage.read('teacher')).toString());
       teacher = Teacher.fromJson(json.decode(getStorage.read('teacher')));
     });
     subscribe();
- 
   }
 
   List<ScreenHiddenDrawer> itens = new List();
@@ -103,7 +103,6 @@ subscribe(){
     });
   }
 
-  
   @override
   Widget build(BuildContext context) {
     CollectionReference users =
@@ -126,8 +125,6 @@ subscribe(){
                 colorLineSelected: Colors.teal,
               ),
               Scaffold(
-                
-                
                 floatingActionButton: SpeedDial(
                   /// both default to 16
                   marginEnd: 18,
@@ -212,7 +209,6 @@ subscribe(){
                       }
 
                       return Container(
-                        
                         height: 150.0,
                         // color: Colors.grey[900],
                         child: new ListView(
@@ -235,7 +231,6 @@ subscribe(){
                                         blurRadius: 1.0,
                                         spreadRadius: 1.0)
                                   ],
-
                                 ),
                                 child: new Card(
                                   shadowColor: Colors.amber,
@@ -250,14 +245,12 @@ subscribe(){
                                 ),
                               ),
                             );
-
                           }).toList(),
                         ),
                       );
                     },
                   ),
-
-                  SizedBox(height:200),
+                  SizedBox(height: 200),
                   Text('last news')
                 ]),
               )),
@@ -283,18 +276,16 @@ subscribe(){
   }
 }
 
-class Home  extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-   return _HomeState();
+    return _HomeState();
   }
-
-
 }
 
-class _HomeState extends State<Home>{
- Teacher teacher;
+class _HomeState extends State<Home> {
+  Teacher teacher;
   fetch_teacher() async {
     setState(() {
       debugPrint(json.decode(getStorage.read('teacher')).toString());
@@ -303,6 +294,7 @@ class _HomeState extends State<Home>{
 
     print(teacher.name);
   }
+
   void _bottomSheetMore(context) {
     showModalBottomSheet(
       context: context,
@@ -322,7 +314,7 @@ class _HomeState extends State<Home>{
           child: new Wrap(
             children: <Widget>[
               new ListTile(
-                title:  Text(
+                title: Text(
                   teacher.name,
                   style: TextStyle(
                     fontSize: 14.0,
@@ -331,14 +323,14 @@ class _HomeState extends State<Home>{
                 ),
               ),
               new ListTile(
-                onTap: (){
-                   Get.to(WebSite());
+                onTap: () {
+                  Get.to(WebSite());
                 },
                 leading: new Container(
                   width: 4.0,
                   child: Icon(
                     Icons.web,
-                       color: Colors.blue,
+                    color: Colors.blue,
                     size: 24.0,
                   ),
                 ),
@@ -351,14 +343,14 @@ class _HomeState extends State<Home>{
                 ),
               ),
               new ListTile(
-                onTap: (){
+                onTap: () {
                   Get.to(Chats());
                 },
                 leading: new Container(
                   width: 4.0,
                   child: Icon(
                     Icons.chat,
-                color: Colors.blue,
+                    color: Colors.blue,
                     size: 24.0,
                   ),
                 ),
@@ -370,12 +362,10 @@ class _HomeState extends State<Home>{
                   ),
                 ),
               ),
-
-
-                new ListTile(
-                  onTap: (){
-                    Get.to(TimeTable());
-                  },
+              new ListTile(
+                onTap: () {
+                  Get.to(TimeTable());
+                },
                 leading: new Container(
                   width: 4.0,
                   child: Icon(
@@ -393,7 +383,7 @@ class _HomeState extends State<Home>{
                 ),
               ),
               new ListTile(
-                onTap: (){
+                onTap: () {
                   Get.to(MyPrpfole());
                 },
                 leading: new Container(
@@ -424,20 +414,15 @@ class _HomeState extends State<Home>{
                   ),
                 ),
                 onTap: () async {
-               
 //var future = await   showLoadingDialog();
-LoadingDialog.show(context);
-Future.delayed(Duration(seconds: 5) ,   (){
-LoadingDialog.hide(context);
-FCMConfig.subscripeToTopic(teacher.id);
-getStorage.write('isLogged', false);
+                  LoadingDialog.show(context);
+                  Future.delayed(Duration(seconds: 5), () {
+                    LoadingDialog.hide(context);
+                    FCMConfig.subscripeToTopic(teacher.id);
+                    getStorage.write('isLogged', false);
 
-
-Get.to(SplashScreen());
-});
-
-
-
+                    Get.to(SplashScreen());
+                  });
                 },
               ),
             ],
@@ -447,263 +432,212 @@ Get.to(SplashScreen());
     );
   }
 
-@override
-void initState() { 
-  super.initState();
-  
- FCMConfig.fcmConfig();
- FCMConfig.getToken().then((value) => debugPrint(value));
+  @override
+  void initState() {
+    super.initState();
 
+    FCMConfig.fcmConfig();
+    FCMConfig.getToken().then((value) => debugPrint(value));
 
-fetch_teacher();
- subscribe();
-}
- subscribe(){
-   var teacher = Teacher.fromJson(json.decode(getStorage.read('teacher')));
-   FCMConfig.subscripeToTopic('teacher${teacher.id.toString()}');
- }
+    fetch_teacher();
+    subscribe();
+  }
 
-int tabIndex = 0;
+  subscribe() {
+    var teacher = Teacher.fromJson(json.decode(getStorage.read('teacher')));
+    FCMConfig.subscripeToTopic('teacher${teacher.id.toString()}');
+  }
 
+  int tabIndex = 0;
 
-  List<Widget> screens =[
-
-Container(
-  height: double.infinity,
-
-  child: ListView(
-    children: [
-      SizedBox(height: 10,),
-Container(
-            height: 150,
+  List<Widget> screens = [
+    Container(
+      height: double.infinity,
+      child: ListView(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 200,
             child: CarouselSlider(
               options: CarouselOptions(
                 autoPlay: true,
                 autoPlayInterval: Duration(seconds: 3),
               ),
-              items: ['assets/images/slide1.webp', 'assets/images/slide2.webp', 'assets/images/slide3.webp',
-                'assets/images/slide4.webp', 'assets/images/slide5.jpeg'
+              items: [
+                'assets/images/slide1.webp',
+                'assets/images/slide2.webp',
+                'assets/images/slide3.webp',
+                'assets/images/slide4.webp',
+                'assets/images/slide5.jpeg'
               ].map((i) {
                 return Builder(
                   builder: (BuildContext context) {
                     return Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: EdgeInsets.symmetric(horizontal: 5.0),
-                        decoration: BoxDecoration(
-                        image: DecorationImage(image: AssetImage(i))
-                        ),
-                        
-                        
-                        );
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(image: AssetImage(i))),
+                    );
                   },
                 );
               }).toList(),
             ),
           ),
- SizedBox(height: 10,) ,
-
-Container(
-  height: 250,
- decoration: BoxDecoration(
-                            color:Colors.blue[200].withOpacity(0.5)  ,
-                            borderRadius: BorderRadius.only(
-                             topLeft:Radius.circular(20.0),
-                             topRight: Radius.circular(20.0),
-                            ),
-                          ),
-
-child: GridView.count(crossAxisCount: 3 ,
-
-children: [
-     GestureDetector(
-       onTap: (){
-         Get.to(MyPrpfole());
-       },
-       child: Container(
-         child: Column(
-
-           children: [
-                    Container(
-                           
-  height: 80,
-  width: 80.0,
-
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            height: 250,
+            decoration: BoxDecoration(
+              color: Colors.blue[200].withOpacity(0.5),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+              ),
+            ),
+            child: GridView.count(
+              crossAxisCount: 3,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.to(MyPrpfole());
+                  },
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Container(
+                            height: 80,
+                            width: 80.0,
                             decoration: BoxDecoration(
-                                image: DecorationImage(image: AssetImage('assets/images/profile.png'))
-                                
-                                
-                                , shape: BoxShape.circle)
-                                ) ,
-
-                                Text('الملف الشخصي')
-
-
-           ],
-         ),
-       ),
-     ) ,
-  //  GestureDetector(
-  //    onTap: (){
-  //      Get.to(Events());
-  //    },
-  //    child: Column(
-  //                   children: [
-  //                     Container(
-  //                         height: 80,
-  //                         width: 80.0,
-  //                         decoration: BoxDecoration(
-  //                            image: DecorationImage(image: AssetImage('assets/images/news.png')) ,
-                             
-                              
-  //                              shape: BoxShape.circle)),
-  //                     Text('الأخبار')
-  //                   ],
-  //                 ),
-  //  ),
-                   GestureDetector(
-                     onTap: (){
-                       Get.to(Chats());
-                     },
-                     child: Column(
-                  children: [
-                      Container(
-                          height: 80,
-                          width: 80.0,
-                          decoration: BoxDecoration(
-                             image: DecorationImage(
-                                  image: AssetImage('assets/images/messages.png')),
-                               shape: BoxShape.circle)),
-                      Text('المحادثات')
-                  ],
-                ),
-                   ),
-     
-  //  GestureDetector(
-  //    onTap: (){
-  //      Get.to(MySubjects());
-  //    },
-  //    child: Column(
-  //                   children: [
-  //                     Container(
-  //                         height: 80,
-  //                         width: 80.0,
-  //                         decoration: BoxDecoration(
-  //                            image: DecorationImage(
-  //                                 image: AssetImage('assets/images/subject.png')),
-                              
-                              
-  //                              shape: BoxShape.circle)),
-  //                     Text('المواد')
-  //                   ],
-  //                 ),
-  //  ),
-
-GestureDetector(
-  onTap: (){
-    Get.to(WebSite());
-  },
-  child:   Column(
-  
-                    children: [
-  
-                      Container(
-  
-                          height: 80,
-  
-                          width: 80.0,
-  
-                          decoration: BoxDecoration(
-  
-                             image: DecorationImage(
-  
-                                  image: AssetImage('assets/images/website.png')), 
-  
-                              
-  
-                              
-  
-                              shape: BoxShape.circle)),
-  
-                      Text('صفحة الكلية')
-  
-                    ],
-  
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/profile.png')),
+                                shape: BoxShape.circle)),
+                        Text('الملف الشخصي')
+                      ],
+                    ),
                   ),
-),
-],
-),
+                ),
+                //  GestureDetector(
+                //    onTap: (){
+                //      Get.to(Events());
+                //    },
+                //    child: Column(
+                //                   children: [
+                //                     Container(
+                //                         height: 80,
+                //                         width: 80.0,
+                //                         decoration: BoxDecoration(
+                //                            image: DecorationImage(image: AssetImage('assets/images/news.png')) ,
 
+                //                              shape: BoxShape.circle)),
+                //                     Text('الأخبار')
+                //                   ],
+                //                 ),
+                //  ),
+                GestureDetector(
+                  onTap: () {
+                    Get.to(Chats());
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 80,
+                          width: 80.0,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/messages.png')),
+                              shape: BoxShape.circle)),
+                      Text('المحادثات')
+                    ],
+                  ),
+                ),
 
-)
+                //  GestureDetector(
+                //    onTap: (){
+                //      Get.to(MySubjects());
+                //    },
+                //    child: Column(
+                //                   children: [
+                //                     Container(
+                //                         height: 80,
+                //                         width: 80.0,
+                //                         decoration: BoxDecoration(
+                //                            image: DecorationImage(
+                //                                 image: AssetImage('assets/images/subject.png')),
 
+                //                              shape: BoxShape.circle)),
+                //                     Text('المواد')
+                //                   ],
+                //                 ),
+                //  ),
 
-    ],
-  ),
-) ,
-
-MySubjects(),
-
-
+                GestureDetector(
+                  onTap: () {
+                    Get.to(WebSite());
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                          height: 80,
+                          width: 80.0,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/images/website.png')),
+                              shape: BoxShape.circle)),
+                      Text('صفحة الكلية')
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    ),
+    MySubjects(),
     Container(
       height: double.infinity,
-        child: Events(),
-        
-
+      child: Events(),
     ),
-
-
-
-
-
   ];
 
-
-
-
-
-
-var _scaffoldKey =  GlobalKey<ScaffoldState>();
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-var subjectProvider =  Provider.of<SubjectProvider>(context);
-var teacherProvider =  Provider.of<UserBloc>(context);
+    var subjectProvider = Provider.of<SubjectProvider>(context);
+    var teacherProvider = Provider.of<UserBloc>(context);
 
-
-var rotate =  Provider.of<AnimContainer>(context );
-var main_bloc  =   Provider.of<MainBloc>(context );
-
+    var rotate = Provider.of<AnimContainer>(context);
+    var main_bloc = Provider.of<MainBloc>(context);
 
     return Scaffold(
       key: _scaffoldKey,
-    
       appBar: AppBar(
-      
-      elevation: 0.0,
-      
-      title: Text('الاستاذ'),  actions: [
-
-IconButton(onPressed: (){
- _bottomSheetMore(context);
-}, icon: Icon(Icons.menu))
-
-
-    ],),
-    
-    
-    
-  body: Padding(padding: EdgeInsets.all(8.0) ,
-  
-  child: ListView(
-
-    children: [
-
-
-       SizedBox(
+        elevation: 0.0,
+        title: Text('الاستاذ'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                _bottomSheetMore(context);
+              },
+              icon: Icon(Icons.menu))
+        ],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: ListView(
+          children: [
+            SizedBox(
               height: 5.0,
             ),
             Container(
-              height: 150,
+              height: 200,
               child: CarouselSlider(
                 options: CarouselOptions(
                   autoPlay: true,
@@ -731,113 +665,131 @@ IconButton(onPressed: (){
                   );
                 }).toList(),
               ),
-            ), 
-
-SizedBox(height: 20,) ,
-
-Container(width: double.infinity,
-child: Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children:[
-Text('موادي' ,   style:TextStyle(color:Colors.white ,   fontWeight:FontWeight.bold) ),
- 
-
-  ]
-),
-) ,
-
-SizedBox(
+            ),
+            SizedBox(
               height: 20,
             ),
-Container(
-                height: MediaQuery.of(context).size.height/2,
-                child: StreamBuilder<List<ClassSubject>>(
-                  stream : subjectProvider.getMySubjects(teacherProvider.getUser()),
-                  builder: (BuildContext context, AsyncSnapshot<List<ClassSubject>> snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return 
-                  GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10 ,
-                  children: snapshot.data.map((subject) => 
-
-OpenContainer(
-                                  openBuilder: (_, closeContainer) =>
-                                 SubjectDetails(subject)    ,
-                                  onClosed: (res) => setState(() {
-                                    
-                                  }),
+            Text("الجدول", style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Container(
+                height: 60,
+                child: StreamBuilder<List<Map>>(
+                    stream: subjectProvider
+                        .getMyTableOneSubject(teacherProvider.getUser()),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Map>> snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(child: Text("ليس لديك محاضرات"));
+                      }
+                      return ListView(
+                          children: snapshot.data
+                              .map((subject) => 
+                              Container(
+                                                              child: ListTile(
+                                      title: Text(subject["subject"]['name']),
+                                      subtitle: Text(subject["subject"]["level"]
+                                              ["name"] +
+                                          "  " +
+                                          subject["subject"]["department"]
+                                              ["name"]),
+                                      trailing: Text(subject["day"]["name"] +
+                                          " " +
+                                          subject["from"]),
+                                    ),
+                              ))
+                              .toList() 
                                 
-                                  closedBuilder: (_, openContainer) =>
-                                     
-
-
-                                         Container(
-                              height: 120,
-                              width: 80,
-                              decoration: BoxDecoration(
-                                  color: Color.fromRGBO(255, 224, 226, 1.0),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
-                              child: Column(
-                                children: [
-                                  Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Text(subject.name,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold))),
-                                  // Align(
-                                  //     alignment: Alignment.centerRight,
-                                  //     child: Text(subject.)),
-                                  SizedBox(
-                                    height: 15.0,
-                                  ),
-                                  Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Image.asset(
-                                          'assets/images/diary.png',
-                                          width: 50,
-                                          height: 60)),
-                                ],
-                              ),
-                            )
-                                ),
-
-
- 
-
-
-
-
-
-                  ).toList(),
-                  
-                  
-                  ); 
+                        
+                        );
+                    })
                     
-                  },
-                ),
- )
-
-
-
-     ],
-  ),
-  ),
-    
-    ) ;
-
-
-
-
+                    ),
+                    Container(
+                                  child: Center(
+                child: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.expand_more_rounded,
+                        color: Colors.blueAccent, size: 40))),
+                                ),
+            
+            SizedBox(height: 10),
+            Container(
+              width: double.infinity,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('موادي',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
+                  ]),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: StreamBuilder<List<ClassSubject>>(
+                stream:
+                    subjectProvider.getMySubjects(teacherProvider.getUser()),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<ClassSubject>> snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return GridView.count(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    children: snapshot.data
+                        .map(
+                          (subject) => OpenContainer(
+                              openBuilder: (_, closeContainer) =>
+                                  SubjectDetails(subject),
+                              onClosed: (res) => setState(() {}),
+                              closedBuilder: (_, openContainer) => Container(
+                                    height: 120,
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Color.fromRGBO(255, 224, 226, 1.0),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Column(
+                                      children: [
+                                        Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Text(subject.name,
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold))),
+                                        // Align(
+                                        //     alignment: Alignment.centerRight,
+                                        //     child: Text(subject.)),
+                                        SizedBox(
+                                          height: 15.0,
+                                        ),
+                                        Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Image.asset(
+                                                'assets/images/diary.png',
+                                                width: 50,
+                                                height: 60)),
+                                      ],
+                                    ),
+                                  )),
+                        )
+                        .toList(),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
-
 }
 
 class DrawerItems extends StatelessWidget {

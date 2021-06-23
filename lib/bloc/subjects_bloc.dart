@@ -56,6 +56,27 @@ for (var item in data.docs) {
     }
   }
 
+Stream<List<Map>> getMyTableOneSubject(Teacher teacher ) async* {
+    debugPrint(teacher.toJson().toString());
+
+    try {
+      QuerySnapshot data = await FirebaseFirestore.instance
+          .collection('table')
+         .where('subject.teacher_id', isEqualTo: teacher.id.toString())
+          .where('subject.semester', isEqualTo: teacher.semester.toJson())
+          .limit(1)
+          .get();
+     List<Map> subjects=[];    
+for (var item in data.docs) {
+  subjects.add(item.data());
+}
+      yield subjects;
+
+      subjects.forEach((element) {debugPrint(element.toString());});
+    } catch (e) {
+      print(e);
+    }
+  }
 
 
 
