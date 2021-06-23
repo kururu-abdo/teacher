@@ -681,6 +681,10 @@ class _HomeState extends State<Home> {
                       if (!snapshot.hasData) {
                         return Center(child: Text("ليس لديك محاضرات"));
                       }
+
+
+
+                      
                       return ListView(
                           children: snapshot.data
                               .map((subject) => 
