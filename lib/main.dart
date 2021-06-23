@@ -139,21 +139,21 @@ class HomePage extends StatelessWidget {
       initialRoute: "/",
       onGenerateRoute: routes,
 // theme: basicTheme() ,
-      theme: ThemeData.from(
-          colorScheme: ColorScheme.light().copyWith(
-        primary: Color(0xFF0336FE),
-        primaryVariant: Color(0xFF5536FE),
-        secondary: Color(0xFFffde03),
-        secondaryVariant: Color(0xffc79400),
-        background: Color(0xFF0336FE),
-        onBackground: Colors.white,
-        onError: Colors.black,
-        onSurface: Colors.white,
-        error: Colors.red,
-        surface:  Colors.blue,
-        onSecondary: Colors.black,
-        onPrimary: Colors.white,
-      )),
+      // theme: ThemeData.from(
+      //     colorScheme: ColorScheme.light().copyWith(
+      //   primary: Color(0xFF0336FE),
+      //   primaryVariant: Color(0xFF5536FE),
+      //   secondary: Color(0xFFffde03),
+      //   secondaryVariant: Color(0xffc79400),
+      //   background: Color(0xFF0336FE),
+      //   onBackground: Colors.white,
+      //   onError: Colors.black,
+      //   onSurface: Colors.white,
+      //   error: Colors.red,
+      //   surface:  Colors.blue,
+      //   onSecondary: Colors.black,
+      //   onPrimary: Colors.white,
+      // )),
 
       home: ChangeNotifierProvider(
           create: (BuildContext context) {

@@ -74,8 +74,13 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                   if (snapshot.hasData) {
                     return ListView(
                       children:
-                          snapshot.data.docs.map((DocumentSnapshot document) {
-                        return Container(
+                          snapshot.data.docs.asMap().map((
+                            i,
+                            DocumentSnapshot document , ) {
+                            
+                        return 
+                        MapEntry(i,
+                        Container(
                           child: InkWell(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
@@ -167,10 +172,15 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                                     color: Colors.green)
                               ],
                               child: Card(
+                                
                                 margin: EdgeInsets.only(bottom: 8.0),
-                                elevation: 8.0,
-                                color: Colors.yellow,
+                                elevation: 2.0,
+                                // color: Colors.yellow,
                                 child: new ListTile(
+                                  leading: Container(
+                                    color:Colors.grey ,
+                                    child : Text(i.toString())
+                                  ),
                                   title: new Text(
                                     document.data()['name'],
                                     style: TextStyle(color: Color(0xFF0336FE)),
@@ -179,8 +189,9 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                               ),
                             ),
                           ),
+                          )
                         );
-                      }).toList(),
+                      }).values.toList()
                     );
                   }
                   return Text("loading.....");
@@ -333,6 +344,7 @@ class _SubjectDetailsState extends State<SubjectDetails> {
                   tooltip: 'Speed Dial',
                   heroTag: 'speed-dial-hero-tag',
                   foregroundColor: Colors.black,
+                  backgroundColor: Theme.of(context).accentColor,
                   elevation: 8.0,
                   shape: CircleBorder(),
                   // orientation: SpeedDialOrientation.Up,
