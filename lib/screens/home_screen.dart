@@ -684,7 +684,7 @@ class _HomeState extends State<Home> {
 
 
 
-                      
+
                       return ListView(
                           children: snapshot.data
                               .map((subject) => 
@@ -717,6 +717,8 @@ class _HomeState extends State<Home> {
                                 ),
             
             SizedBox(height: 10),
+
+            
             Container(
               width: double.infinity,
               child: Row(
