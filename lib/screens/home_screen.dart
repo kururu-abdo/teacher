@@ -744,6 +744,8 @@ class _HomeState extends State<Home> {
                       child: CircularProgressIndicator(),
                     );
                   }
+                  
+                  
                   return GridView.count(
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
@@ -790,8 +792,61 @@ class _HomeState extends State<Home> {
                   );
                 },
               ),
+            ) ,
+
+
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            
+            children :  [
+
+
+InkWell(
+                    onTap: () {
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                             height: 80,
+                            width: 80.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/teacher.png')),
+                                shape: BoxShape.circle)),
+                        Text('الأساتذة',
+                            style: TextStyle(fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                    },
+                    child: Column(
+                      children: [
+                        Container(
+                             height: 80,
+                            width: 80.0,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/teacher.png')),
+                                shape: BoxShape.circle)),
+                        Text('الأساتذة',
+                            style: TextStyle(fontWeight: FontWeight.bold))
+                      ],
+                    ),
+                  ),
+
+
+
+
+
+            ]
+            
+            
+            
             )
-          ],
+           ],
         ),
       ),
     );
