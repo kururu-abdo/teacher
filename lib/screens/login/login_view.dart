@@ -62,22 +62,7 @@ class _LoginFormState extends State<LoginForm>  {
                   padding: EdgeInsets.all(8.0),
                   child: 
                   
-                  Container(
-                    height: height,
-                    child: Stack(
-                      children:[
-                        Positioned(
-                          top: -height * .15,
-                          right: -MediaQuery.of(context).size.width * .4,
-                          child: BezierContainer()), 
-                         Column(children: [
-                        SizedBox(
-                          height: 200.0,
-                        ),
-                        
-                        SizedBox(
-                          height: 20.0,
-                        ),
+             
                         Center(
                             child: FormBlocListener<LoginFormBloc, String, String>(
                           onSubmitting: (context, state) {
@@ -105,14 +90,15 @@ class _LoginFormState extends State<LoginForm>  {
                     
                             Scaffold.of(context).showSnackBar(
                                 SnackBar(
-                                  backgroundColor: Colors.yellow,
-                                  content: Text(state.failureResponse ,  style: TextStyle(color: Colors.blue),)));
+                                  content: Text(state.failureResponse ,  )));
                           },
                           child: SingleChildScrollView(
                             physics: ClampingScrollPhysics(),
                             // login form
                             child: Column(
                               children: <Widget>[
+Image.asset("assets/images/ic_login.png"),
+
                                 SizedBox(
                                   width: 250,
                                   child: TextFieldBlocBuilder(
@@ -121,11 +107,9 @@ class _LoginFormState extends State<LoginForm>  {
                                     decoration: InputDecoration(
                                         labelText: 'الهانف',
                                         
-                                        labelStyle:  TextStyle(color: Color(0xFFd8dfff)) ,
-                                                                           hintStyle:
-                                            TextStyle(color: Color(0xFFd8dfff)),
+                                                                        
      
-                                        prefixIcon: Icon(Icons.phone ,  color: Color(0xffd8dfff)),
+                                        prefixIcon: Icon(Icons.phone ,  ),
                                         // filled: true,
                                         // fillColor: Colors.yellow[200],
                                         border: UnderlineInputBorder(),
@@ -143,9 +127,7 @@ class _LoginFormState extends State<LoginForm>  {
                                     
                                     decoration: InputDecoration(
                                         labelText: 'كلمة السر',
-                                          labelStyle:
-                                            TextStyle(color: Color(0xFFd8dfff)),
-                                        hintStyle: TextStyle(color: Color(0xFF959fd1)),
+                                     
                                         prefixIcon: Icon(Icons.lock ,   color: Color(0xffd8dfff),),
                                         border: UnderlineInputBorder(),
                                         contentPadding: EdgeInsets.all(15.0)),
@@ -172,7 +154,10 @@ class _LoginFormState extends State<LoginForm>  {
                                     height: 50,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: Color(0xFFffcf00)),
+                                        color: Colors.blue
+                                        // 
+                                        
+                                        ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Center(
@@ -188,14 +173,13 @@ class _LoginFormState extends State<LoginForm>  {
                             ),
                           ),
                         ))
-                      ]),
+                      ,
                     
                     
-                    
-                      ]
-                    ),
-                  ),
-                )),
+                )
+                      
+                 
+                )
           );
 
 

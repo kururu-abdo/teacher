@@ -335,6 +335,7 @@ Spacer()
 
                     var data = await lecture.add({
                       'id': uuid.v1(),
+                      "teacher_id" :  widget.data["teacher_id"] ,
 
                       'date': DateTime.now(),
 

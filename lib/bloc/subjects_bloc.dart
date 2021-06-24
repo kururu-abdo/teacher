@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:teacher_side/models/event.dart';
 import 'package:teacher_side/models/subject.dart';
 import 'package:teacher_side/models/teacher.dart';
 
@@ -32,6 +33,54 @@ try {
 
   }
 
+ Future<List<Event>> getMyEvents(Teacher teacher) async {
+     List<Event> events =[];
+    try {
+      QuerySnapshot data = await FirebaseFirestore.instance
+          .collection('subject-events')
+          .where('teacher_id', isEqualTo: teacher.id.toString())
+          .orderBy("date" )
+          .get();
+if (data.docs.length>0) {
+     debugPrint("kdjfldsjhflsdahfglkashogsodgo");
+   debugPrint(data.docs.first.data().toString());
+    
+    events=        data.docs.map((e) => Event.fromJson(e.data())).toList();
+
+       
+}
+ return events;
+
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+
+
+
+
+ Stream<List<ClassSubject>> getMySubjects2(Teacher teacher) async* {
+    debugPrint(teacher.toJson().toString());
+
+    try {
+      QuerySnapshot data = await FirebaseFirestore.instance
+          .collection('subject')
+          .where('teacher_id', isEqualTo: teacher.id.toString())
+          .where('semester', isEqualTo: teacher.semester.toJson())
+          .limit(2)
+          .get();
+
+      data.docs.map((e) => print(e.data()));
+      List<ClassSubject> subjects =
+          data.docs.map((e) => ClassSubject.fromJson(e.data())).toList();
+
+      yield subjects;
+    } catch (e) {
+      print(e);
+    }
+  }
 
 
   Stream<List<Map>> getMyTable(Teacher teacher ,  Map day) async* {

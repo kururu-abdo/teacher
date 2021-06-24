@@ -70,6 +70,7 @@ Future updateNotfications(Map<dynamic ,dynamic> data) async {
 
 
 Stream<List<ClassSubject>> fetch_subjects2(Teacher teacher , Semester semester) async*{
+  
   QuerySnapshot data =await FirebaseFirestore.instance
   .collection('subject')
   // .where('teacher' , isEqualTo: teacher.toJson())

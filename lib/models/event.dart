@@ -10,11 +10,11 @@ class Event{
   String title;
 
   String body;
-  Timestamp time;
+  String time;
   List Files ;
+Timestamp date;
 
-
-
+String teacher_id;
 
 Event(this.id, this.title ,this.body ,this.Files);
 
@@ -24,7 +24,9 @@ Event.fromJson(Map<dynamic ,dynamic> data){
   this.body =data['body']??'';
   this.time =data['time']??'';
   this.Files= data['files'];
-  
+
+  this.date =   data['date'];
+  this.teacher_id =  data['teacher_id'];
 }
 
 Map<dynamic ,dynamic>  toJson(){
@@ -35,6 +37,8 @@ Map<dynamic ,dynamic>  toJson(){
   'body':this.body ,
   'time': this.time ,
   'files': this.Files,
+  'date' :  this.date ,
+  'teacher_id':  this.teacher_id
 
 
   };
