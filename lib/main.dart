@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -155,6 +156,11 @@ class HomePage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       onGenerateRoute: routes,
+theme: ThemeData.from(colorScheme: ColorScheme.light(
+primary: Colors.green ,
+secondary: Color.fromARGB(255, 234, 245, 239)
+)) ,
+
 // theme: basicTheme() ,
       // theme: ThemeData.from(
       //     colorScheme: ColorScheme.light().copyWith(

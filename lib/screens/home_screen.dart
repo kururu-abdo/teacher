@@ -343,7 +343,7 @@ class _HomeState extends State<Home> {
                                  height: 50,
                                  width: 200,
                                  decoration: BoxDecoration(
-                                   color: Colors.red.withOpacity(0.4)
+                                   color: Color.fromARGB(255, 166, 205, 78)
                                  ),
                                  child: Center(child: Text("ليس لديك محاضرات")));
                             }
@@ -354,8 +354,8 @@ class _HomeState extends State<Home> {
                                   children: snapshot.data
                                       .map((subject) => Card(
                                             elevation: 8.0,
-                                            color: Color.fromRGBO(
-                                                255, 224, 226, 1.0),
+                                                                              color: Color.fromARGB(
+                                                255, 166, 205, 78),
                                             child: ListTile(
                                               title: Text(
                                                   subject["subject"]['name']),
@@ -381,7 +381,7 @@ class _HomeState extends State<Home> {
                                   Get.to(TimeTable());
                                 },
                                 icon: Icon(Icons.expand_more_rounded,
-                                    color: Colors.blueAccent, size: 40))),
+                                                                       color: Color.fromARGB(255, 166, 205, 78), size: 40))),
                       ),
                     ],
                   )),
@@ -402,7 +402,7 @@ class _HomeState extends State<Home> {
                                   Get.to(Material(child: MySubjects()));
                                 },
                                 icon: Icon(Icons.expand_more_rounded,
-                                    color: Colors.blueAccent, size: 40))),
+                                                                      color: Color.fromARGB(255, 166, 205, 78), size: 40))),
                       ),
                     ]),
               ),
@@ -436,8 +436,8 @@ class _HomeState extends State<Home> {
                                       height: 120,
                                       width: 80,
                                       decoration: BoxDecoration(
-                                          color: Color.fromRGBO(
-                                              255, 224, 226, 1.0),
+                                                                           color:
+                                              Color.fromARGB(255, 166, 205, 78),
                                           borderRadius: BorderRadius.all(
                                               Radius.circular(10))),
                                       child: Column(
