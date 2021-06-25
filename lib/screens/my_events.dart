@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
+import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:provider/provider.dart';
 import 'package:teacher_side/bloc/main_bloc.dart';
@@ -7,6 +9,8 @@ import 'package:teacher_side/bloc/subjects_bloc.dart';
 import 'package:teacher_side/bloc/user_bloc.dart';
 import 'package:teacher_side/models/event.dart';
 import 'package:teacher_side/models/subject.dart';
+import 'package:teacher_side/screens/event_comments.dart';
+import 'package:teacher_side/screens/event_details.dart';
 
 class MyEvents extends StatefulWidget {
   const MyEvents({ Key key }) : super(key: key);
@@ -47,29 +51,74 @@ child :   FutureBuilder<List<Event>>(
 
 
 
-    return  Container(width: double.infinity,
-    
-    
-    child: Column(
+    return  
+    Bounce(
+  
+                        duration: Duration(milliseconds: 200),
+  onPressed: (){ 
+  
+  Get.to(
+EventComments(event.id)  
+  );
+   },
 
+
+      child: Container(width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20.0)) ,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey[200] ,
+          )
+        ]
+      ),
+      
+      child: Center(
+        child: Column(
+    
+          children: [
+    
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Text(event.title ,   style: TextStyle(fontWeight: FontWeight.bold ) ) ,
-
-    Text(dateData(event.date.millisecondsSinceEpoch))
-  ],
-)
-
-
-
-
-      ],
+        Text(event.title ,   style: TextStyle(fontWeight: FontWeight.bold ) ) ,
+    
+        Text(dateData(event.date.millisecondsSinceEpoch))
+      ], 
+    ) ,
+    FutureBuilder<ClassSubject>(
+      future: getSubjectName(event.subject_id),
+      builder: (BuildContext context, AsyncSnapshot<ClassSubject> snapshot) {
+        if (snapshot.hasData) {
+              return   Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(snapshot.data.name) ,
+    
+    
+      Text(snapshot.data.department.name+"  "+
+                                              snapshot.data.level.name)
+    ],
+    
+              );
+    
+        }
+    
+    
+        return Center(child: CircularProgressIndicator(),);
+      },
     ),
     
+    Divider(),
     
+    
+    
+          ],
+        ),
+      ),
+      
+      
+      ),
     );
   }).toList(),)  ;
   

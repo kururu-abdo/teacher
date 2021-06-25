@@ -46,15 +46,22 @@ class DBProvider {
 updateNotifica(LocalNotification notification) async{
     final db = await database;
 
-int res = await db.update('Notification', notification.toJson(),
+int res = await db.update('Notification', {"isread": true},
         where: "id = ?", whereArgs: <int>[notification.id]);
     return res > 0 ? true : false;
 }
-
+  Future<int> delete(int id) async {
+    var dbClient = await database;
+    return await dbClient.delete(
+      'Notification',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 
    Future<List<LocalNotification>> getAllNotification() async {
     final db = await database;
-    var res = await db.query("Notification");
+    var res = await db.query("Notification" ,orderBy: "id" );
     List<LocalNotification> list =
         res.isNotEmpty ? res.map((c) => LocalNotification.fromJson(c)).toList() : [];
     return list;

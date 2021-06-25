@@ -83,9 +83,13 @@ ChatPage(
   
   user: snapshot.data[index]
   
-  ,  me:User(userBloc.getUser().id,  userBloc.getUser().name, 
+  ,  me:
+  User(userBloc.getUser().id,  userBloc.getUser().name, 
 
-'أستاذ' ),
+'أستاذ' )
+
+
+,
 
   ));
 },

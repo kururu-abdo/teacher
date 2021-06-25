@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -58,7 +59,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
       body: notification.body,
       time: DateTime.now().millisecondsSinceEpoch));
 
-  Get.toNamed('/notification');
+  //Get.toNamed('/notification');
 }
 
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
@@ -69,7 +70,6 @@ main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  FCMConfig();
   await GetStorage.init();
   await FlutterDownloader.initialize();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -79,7 +79,24 @@ main(List<String> args) async {
     badge: true,
     sound: true,
   );
+  final NotificationAppLaunchDetails notificationAppLaunchDetails =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('app_icon');
+
+  final InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String payload) async {
+      debugPrint('notification payload: $payload');
+ SchedulerBinding.instance.addPostFrameCallback((_) {
+          Get.toNamed('/notification');
+
+    });
+    
+  });
   BackendlessInit().init();
   runApp(MultiProvider(providers: [
     Provider<ServiceProvider>(create: (_) => ServiceProvider()),
@@ -154,7 +171,10 @@ class HomePage extends StatelessWidget {
       //   onSecondary: Colors.black,
       //   onPrimary: Colors.white,
       // )),
+ routes: {
+      NotificationPage.page_id:(context)=> NotificationPage()
 
+ },
       home: ChangeNotifierProvider(
           create: (BuildContext context) {
             return MainBloc();

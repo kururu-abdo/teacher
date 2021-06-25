@@ -247,7 +247,14 @@ Align(
     //   );
     //  },
     ),
-  ) :  Text('no document with this lecture')
+  ) :   Column(
+                                children: [
+                                  Image.asset(
+                                      "assets/images/file_not_found.png"),
+                                  Text("لا توجد ملفات ")
+                                ],
+                              )
+
 
 )
 

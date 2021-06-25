@@ -42,6 +42,7 @@ dependencies:
   flutter_form_bloc: ^0.20.4
   form_bloc: ^0.20.4
   rxdart:
+  flutter_bounce: ^1.1.0
   flutter_filereader: ^2.2.0
   get_storage:
   provider:

@@ -91,28 +91,18 @@ Align(
   height: 100,
         child: Image.network(data['files'][index]));
      
-      
-      Container(
-        height: 80,
-        width: 80,
-      
-        child: Card(
-          
-          child:Column(children: [
-            Text('file ${index+1}') ,
-
-            IconButton(icon: Icon(Icons.download_rounded), onPressed: (){
-
-              
-            })
-
-
-          ],)
-        ),
-      );
+ 
      },
     ),
-  ) :  Text('no document with this lecture')
+  ) :  
+
+
+  Column(
+    children: [
+      Image.asset("assets/images/file_not_found.png") ,
+      Text("لا توجد ملفات ")
+    ],
+  )
 
 )
 

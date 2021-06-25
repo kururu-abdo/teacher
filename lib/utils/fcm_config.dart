@@ -12,9 +12,7 @@ import 'package:teacher_side/utils/local_datase.dart';
 
 
 class FCMConfig {
-  FCMConfig() {
-    fcmConfig();
-  }
+  FCMConfig() ;
 
   static fcmConfig() async {
     debugPrint('config notfication');
@@ -37,9 +35,8 @@ class FCMConfig {
 Get.defaultDialog(title:'اخطار جديد'   ,  
 content: Text("هنالك اخطار جديد"),
 
-backgroundColor: Colors.yellow,
 actions: [TextButton(onPressed: (){
-  Get.to(NotificationPage());
+  Get.toNamed('/notification');
 }, 
 
 child: Text('حسنا'  ))] ,    );

@@ -321,6 +321,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.0.1"
+  flutter_bounce:
+    dependency: "direct main"
+    description:
+      name: flutter_bounce
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
   flutter_document_picker:
     dependency: "direct main"
     description:
