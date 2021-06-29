@@ -30,7 +30,10 @@ class _MyHomePageState extends State<ChatPage> {
   TextEditingController _controller = new TextEditingController();
 
   ScrollController _scrollController = ScrollController();
-
+double _sigmaX = 4; // from 0-10
+  double _sigmaY = 4; // from 0-10
+  double _opacity = 0.6; // from 0-1.0
+  bool showBlur = true;
   @override
   void initState() {
     super.initState();

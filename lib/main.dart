@@ -158,8 +158,13 @@ class HomePage extends StatelessWidget {
       onGenerateRoute: routes,
 theme: ThemeData.from(colorScheme: ColorScheme.light(
 primary: Colors.green ,
-secondary: Color.fromARGB(255, 234, 245, 239)
-)) ,
+
+) ,
+
+
+)
+
+ ,
 
 // theme: basicTheme() ,
       // theme: ThemeData.from(
