@@ -2,25 +2,18 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:animations/animations.dart';
-import 'package:backendless_sdk/backendless_sdk.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:hidden_drawer_menu/hidden_drawer_menu.dart';
-import 'package:load/load.dart';
+import 'package:sizer/sizer.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:teacher_side/bloc/animated_container.dart';
 import 'package:teacher_side/bloc/main_bloc.dart';
 import 'package:teacher_side/bloc/subjects_bloc.dart';
 import 'package:teacher_side/bloc/user_bloc.dart';
 import 'package:teacher_side/models/subject.dart';
 import 'package:teacher_side/models/teacher.dart';
-import 'package:teacher_side/screens/chats/chat_page.dart';
 import 'package:teacher_side/screens/chats/students_chats.dart';
-import 'package:teacher_side/screens/events.dart';
 import 'package:teacher_side/screens/login/login_view.dart';
 import 'package:teacher_side/screens/my_events.dart';
 import 'package:teacher_side/screens/my_lectures.dart';
@@ -95,7 +88,7 @@ class _HomeState extends State<Home> {
                   width: 4.0,
                   child: Icon(
                     Icons.web,
-                    color: Colors.blue,
+                    color: Colors.green.withOpacity(0.5),
                     size: 24.0,
                   ),
                 ),
@@ -115,7 +108,7 @@ class _HomeState extends State<Home> {
                   width: 4.0,
                   child: Icon(
                     Icons.chat,
-                    color: Colors.blue,
+                    color: Colors.green.withOpacity(0.5),
                     size: 24.0,
                   ),
                 ),
@@ -135,7 +128,7 @@ class _HomeState extends State<Home> {
                   width: 4.0,
                   child: Icon(
                     Icons.schedule,
-                    color: Colors.blue,
+                    color: Colors.green.withOpacity(0.5),
                     size: 24.0,
                   ),
                 ),
@@ -155,7 +148,7 @@ class _HomeState extends State<Home> {
                   width: 4.0,
                   child: Icon(
                     Icons.person,
-                    color: Colors.blue,
+                    color: Colors.green.withOpacity(0.5),
                     size: 24.0,
                   ),
                 ),
@@ -212,9 +205,9 @@ class _HomeState extends State<Home> {
     FCMConfig.subscripeToTopic('teacher${teacher.id.toString()}');
   }
 
- 
+  bool isShow = false;
   var _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  Map SelectedDate;
   @override
   Widget build(BuildContext context) {
     var subjectProvider = Provider.of<SubjectProvider>(context);
@@ -241,7 +234,7 @@ class _HomeState extends State<Home> {
         body: Padding(
           padding: EdgeInsets.all(8.0),
           child: ListView(
-            physics :  BouncingScrollPhysics() ,
+            physics: BouncingScrollPhysics(),
             children: [
               SizedBox(
                 height: 5.0,
@@ -280,200 +273,251 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 10,
               ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                InkWell(
-                  onTap: () {
-
-                    Get.to(MyLectures());
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 80,
-                          width: 80.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/images/teaching.png')),
-                              shape: BoxShape.circle)),
-                      Text('المحاضرات',
-                          style: TextStyle(fontWeight: FontWeight.bold))
-                    ],
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Get.to(MyEvents());
-                  },
-                  child: Column(
-                    children: [
-                      Container(
-                          height: 80,
-                          width: 80.0,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/images/calendar.png')),
-                              shape: BoxShape.circle)),
-                      Text('الاعلانات',
-                          style: TextStyle(fontWeight: FontWeight.bold))
-                    ],
-                  ),
-                ),
-              ]),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text("الجدول"), Icon(Icons.calendar_today)]),
               SizedBox(
                 height: 10,
               ),
-              Text("الجدول", style: TextStyle(fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
               Container(
-                  height: 100,
-                  child: Column(
-                    children: [
-                      StreamBuilder<List<Map>>(
-                          stream: subjectProvider
-                              .getMyTableOneSubject(teacherProvider.getUser()),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Map>> snapshot) {
-                            if (!snapshot.hasData) {
-                              return
-                              
-                              
-                               Container(
-                                 height: 50,
-                                 width: 200,
-                                 decoration: BoxDecoration(
-                                   color: Color.fromARGB(255, 166, 205, 78)
-                                 ),
-                                 child: Center(child: Text("ليس لديك محاضرات")));
-                            }
-
-                            return Container(
-                              height: 60,
-                              child: ListView(
-                                  children: snapshot.data
-                                      .map((subject) => Card(
-                                            elevation: 8.0,
-                                                                              color: Color.fromARGB(
-                                                255, 166, 205, 78),
-                                            child: ListTile(
-                                              title: Text(
-                                                  subject["subject"]['name']),
-                                              subtitle: Text(subject["subject"]
-                                                      ["level"]["name"] +
-                                                  "  " +
-                                                  subject["subject"]
-                                                      ["department"]["name"]),
-                                              trailing: Text(subject["day"]
-                                                      ["name"] +
-                                                  " " +
-                                                  subject["from"]),
-                                            ),
-                                          ))
-                                      .toList()),
-                            );
-                          }),
-                      Container(
-                        height: 40,
-                        child: Center(
-                            child: IconButton(
-                                onPressed: () {
-                                  Get.to(TimeTable());
-                                },
-                                icon: Icon(Icons.expand_more_rounded,
-                                                                       color: Color.fromARGB(255, 166, 205, 78), size: 40))),
-                      ),
-                    ],
-                  )),
-              SizedBox(height: 10),
-              Container(
-                width: double.infinity,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('موادي',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-
-                          
-                      Container(
-                        child: Center(
-                            child: IconButton(
-                                onPressed: () {
-                                  Get.to(Material(child: MySubjects()));
-                                },
-                                icon: Icon(Icons.expand_more_rounded,
-                                                                      color: Color.fromARGB(255, 166, 205, 78), size: 40))),
-                      ),
-                    ]),
+                height: 100,
+                child: ListView(
+                  // This next line does the trick.
+                  scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
+                  children: DAYS
+                      .map(
+                        (e) => InkWell(
+                          onTap: () {
+                            setState(() {
+                              SelectedDate = e;
+                              isShow = true;
+                            });
+                          },
+                          child: Container(
+                            width: 60.0,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(40)),
+                                color: SelectedDate == e
+                                    ? Colors.green
+                                    : Colors.white),
+                            child: Center(
+                                child: Text(
+                              e['name'],
+                              style: TextStyle(
+                                  color: SelectedDate == e
+                                      ? Colors.white
+                                      : Colors.black),
+                            )),
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
+              SizedBox(height: 10),
+              Visibility(
+                  visible: isShow,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 3,
+                    child: FutureBuilder<List<Map>>(
+                      future: subjectProvider.getMyTable2(
+                          teacherProvider.getUser(), SelectedDate),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Map>> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData && snapshot.data.length > 0) {
+                            return ListView.builder(
+                              itemCount: snapshot.data.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  child: ListTile(
+                                    title: Text(snapshot.data[index]["subject"]
+                                        ['name']),
+                                    subtitle: Row(
+                                      children: [
+                                        Text(snapshot.data[index]['from']),
+                                        Text("---"),
+                                        Text(snapshot.data[index]['to']),
+                                      ],
+                                    ),
+                                    leading: Image.asset(
+                                        'assets/images/subject.png'),
+                                    trailing: Text(
+                                      snapshot.data[index]['hall'],
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                          return Center(
+                            child: Text('لا توجد محاضرات في هذا اليوم '),
+                          );
+                        }
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    ),
+                  )),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Container(
                 height: MediaQuery.of(context).size.height / 2,
-                child: StreamBuilder<List<ClassSubject>>(
-                  stream:
-                      subjectProvider.getMySubjects2(teacherProvider.getUser()),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<ClassSubject>> snapshot) {
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: Text("ليس لديك مواد بعد!"),
-                      );
-                    }
-
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      children: snapshot.data
-                          .map(
-                            (subject) => OpenContainer(
-                                openBuilder: (_, closeContainer) =>
-                                    SubjectDetails(subject),
-                                onClosed: (res) => setState(() {}),
-                                closedBuilder: (_, openContainer) => Container(
-                                      height: 120,
-                                      width: 80,
-                                      decoration: BoxDecoration(
-                                                                           color:
-                                              Color.fromARGB(255, 166, 205, 78),
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                              alignment: Alignment.centerRight,
-                                              child: Text(subject.name,
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold))),
-                                          // Align(
-                                          //     alignment: Alignment.centerRight,
-                                          //     child: Text(subject.)),
-                                          SizedBox(
-                                            height: 15.0,
-                                          ),
-                                          Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Image.asset(
-                                                  'assets/images/diary.png',
-                                                  width: 50,
-                                                  height: 60)),
-                                        ],
-                                      ),
-                                    )),
-                          )
-                          .toList(),
-                    );
-                  },
+                margin: EdgeInsets.all(10.0),
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
                 ),
-              ),
+                child: Center(
+                  child: GridView.count(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10.0,
+                      physics: BouncingScrollPhysics(),
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Get.to(MyLectures());
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 60.0.sp,
+                                  width: 60.0.sp,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/teaching.png') ,   fit:BoxFit.cover ),
+                                      shape: BoxShape.rectangle)),
+                              Text('المحاضرات',
+
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.to(MyEvents());
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 60.0.sp,
+                                  width: 60.0.sp,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/calendar.png') ,fit:BoxFit.cover ),
+                                      shape: BoxShape.rectangle)),
+                              Text('الاعلانات',
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+
+
+
+InkWell(
+                          onTap: () {
+                            Get.to(MySubjects());
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 60.0.sp,
+                                  width: 60.0.sp,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/subject.png'),
+                                          fit: BoxFit.cover),
+                                      shape: BoxShape.rectangle)),
+                              Text('المواد',
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+
+
+InkWell(
+                          onTap: () {
+                            Get.to(WebSite());
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 60.0.sp,
+                                  width: 60.0.sp,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/news.png'),
+                                          fit: BoxFit.cover),
+                                      shape: BoxShape.rectangle)),
+                              Text('الموقع  الالكتروني',
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+
+InkWell(
+                          onTap: () {
+                            Get.to(TimeTable());
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height: 60.0.sp,
+                                  width: 60.0.sp,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/teaching.png'),
+                                          fit: BoxFit.cover),
+                                      shape: BoxShape.rectangle)),
+                              Text('الجدول',
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                            ],
+                          ),
+                        ),
+
+
+                        
+                      ]),
+                ),
+              )
             ],
           ),
         ),
       ),
     );
+  }
+
+  static List<String> getDaysOfWeek([String locale]) {
+    final now = DateTime.now();
+    final firstDayOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    return List.generate(7, (index) => index)
+        .map((value) => intl.DateFormat(intl.DateFormat.WEEKDAY, locale)
+            .format(firstDayOfWeek.add(Duration(days: value))))
+        .toList();
   }
 }
 

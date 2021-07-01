@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_filereader/flutter_filereader.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:load/load.dart';
 import 'package:provider/provider.dart';
 import 'package:teacher_side/bloc/user_bloc.dart';
 import 'package:teacher_side/utils/days.dart';
@@ -75,10 +76,24 @@ class _LectureDisscusionState extends State<LectureDisscusion> {
                                           top: 0,
                                           right: 0,
                                           child: IconButton(
-                                              onPressed: () {
-                                                setState(() {
+                                              onPressed: () async{
                                                   // LecureFiles.remove(e);
-                                                });
+
+                                                  var future =await   showCustomLoadingWidget(
+
+                                                    Center(child: Material(child: Container(
+                                                      width: 250 ,
+                                                      height: 80 ,
+                                                      child: Center(child:  Text('جاري حذف الملف'))
+                                                      ,),),)
+                                                  );
+                       await    FirebaseFirestore.instance.collection("lectures").doc(widget.data['id'])
+                          .update({"files" :  FieldValue.arrayRemove(file)});
+
+future.dismiss();
+
+
+                                              
                                               },
                                               icon: Icon(
                                                 Icons.highlight_off,

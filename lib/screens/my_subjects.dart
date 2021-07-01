@@ -93,10 +93,19 @@ setState(() {
             itemBuilder: (BuildContext context, int index) {
              
             return   Container(
-              margin: EdgeInsets.all(5.0),
+              margin: EdgeInsets.all(10.0),
       
                 decoration:BoxDecoration(
-        color: Colors.grey[500].withOpacity(0.5),
+              boxShadow: [
+                     BoxShadow(
+                                    color: Colors.green.withOpacity(0.5),
+                                    spreadRadius: 5,
+                                    // blurRadius: 7,
+                                    // offset: Offset(
+                                    //     0, 3), // changes position of shadow
+                                  ),
+              ],
+        // color: Colors.grey[500].withOpacity(0.5),
                         borderRadius: BorderRadius.horizontal(
                                   left: Radius.circular(20.0),
                                   right: Radius.circular(20.0),

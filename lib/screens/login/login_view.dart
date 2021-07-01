@@ -97,7 +97,7 @@ class _LoginFormState extends State<LoginForm>  {
                             // login form
                             child: Column(
                               children: <Widget>[
-Image.asset("assets/images/ic_login.png"),
+Image.asset("assets/images/ic_login_green.png"),
 
                                 SizedBox(
                                   width: 250,
@@ -154,7 +154,7 @@ Image.asset("assets/images/ic_login.png"),
                                     height: 50,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: Colors.blue
+                                        color: Color.fromARGB(255, 115, 179, 20)
                                         // 
                                         
                                         ),

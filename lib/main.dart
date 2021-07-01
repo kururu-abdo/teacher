@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:load/load.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer_util.dart';
 import 'package:teacher_side/bloc/animated_container.dart';
 import 'package:teacher_side/bloc/main_bloc.dart';
 import 'package:teacher_side/bloc/services_provider.dart';
@@ -141,73 +142,92 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      locale: new Locale("ar", ""),
-      localizationsDelegates: [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en', ''), // English, no country code
-        const Locale('ar', ''), // Spanish, no country code
-      ],
-//themeMode: ThemeMode.dark,
-      debugShowCheckedModeBanner: false,
-      initialRoute: "/",
-      onGenerateRoute: routes,
-theme: ThemeData.from(colorScheme: ColorScheme.light(
-primary: Colors.green ,
-
-) ,
-
-
-)
-
- ,
-
-// theme: basicTheme() ,
-      // theme: ThemeData.from(
-      //     colorScheme: ColorScheme.light().copyWith(
-      //   primary: Color(0xFF0336FE),
-      //   primaryVariant: Color(0xFF5536FE),
-      //   secondary: Color(0xFFffde03),
-      //   secondaryVariant: Color(0xffc79400),
-      //   background: Color(0xFF0336FE),
-      //   onBackground: Colors.white,
-      //   onError: Colors.black,
-      //   onSurface: Colors.white,
-      //   error: Colors.red,
-      //   surface:  Colors.blue,
-      //   onSecondary: Colors.black,
-      //   onPrimary: Colors.white,
-      // )),
- routes: {
-      NotificationPage.page_id:(context)=> NotificationPage()
-
- },
-      home: ChangeNotifierProvider(
-          create: (BuildContext context) {
-            return MainBloc();
-          },
-          child: LoadingProvider(
-              themeData: LoadingThemeData(
-                loadingBackgroundColor: Colors.white,
-                backgroundColor: Colors.black54,
-              ),
-              loadingWidgetBuilder: (ctx, data) {
-                return Center(
-                  child: SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: Container(
-                      child: CupertinoActivityIndicator(),
-                      color: Colors.blue,
+    return
+   LayoutBuilder(                           //return LayoutBuilder
+      builder: (context, constraints) {
+        return OrientationBuilder(                  //return OrientationBuilder
+          builder: (context, orientation) {
+            //initialize SizerUtil()
+            SizerUtil().init(constraints, orientation);  //initialize SizerUtil
+            return 
+        GetMaterialApp(
+        locale: new Locale("ar", ""),
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''), // English, no country code
+          const Locale('ar', ''), // Spanish, no country code
+        ],
+     //themeMode: ThemeMode.dark,
+        debugShowCheckedModeBanner: false,
+        initialRoute: "/",
+        onGenerateRoute: routes,
+     theme: ThemeData.from(colorScheme: ColorScheme.light(
+     primary: Color.fromARGB(255, 89, 169, 83) ,
+     onPrimary: Colors.white ,
+     background: Colors.white ,
+     onBackground: Colors.black ,
+     surface: Colors.white ,
+     onSurface: Colors.black  ,
+     secondary: Color.fromARGB(255, 204, 255, 193)
+      ,
+      onSecondary: Colors.black
+     ) ,
+     
+     
+     )
+     
+      ,
+     
+     // theme: basicTheme() ,
+        // theme: ThemeData.from(
+        //     colorScheme: ColorScheme.light().copyWith(
+        //   primary: Color(0xFF0336FE),
+        //   primaryVariant: Color(0xFF5536FE),
+        //   secondary: Color(0xFFffde03),
+        //   secondaryVariant: Color(0xffc79400),
+        //   background: Color(0xFF0336FE),
+        //   onBackground: Colors.white,
+        //   onError: Colors.black,
+        //   onSurface: Colors.white,
+        //   error: Colors.red,
+        //   surface:  Colors.blue,
+        //   onSecondary: Colors.black,
+        //   onPrimary: Colors.white,
+        // )),
+      routes: {
+        NotificationPage.page_id:(context)=> NotificationPage()
+     
+      },
+        home: ChangeNotifierProvider(
+            create: (BuildContext context) {
+              return MainBloc();
+            },
+            child: LoadingProvider(
+                themeData: LoadingThemeData(
+                  loadingBackgroundColor: Colors.white,
+                  backgroundColor: Colors.black54,
+                ),
+                loadingWidgetBuilder: (ctx, data) {
+                  return Center(
+                    child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: Container(
+                        child: CupertinoActivityIndicator(),
+                        color: Colors.blue,
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: SplashScreen())),
-    );
+                  );
+                },
+                child: SplashScreen())),
+         );
+
+           } );
+        });
+     
   }
 }

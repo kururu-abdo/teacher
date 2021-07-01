@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
     package="com.example.teacher_side">
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
      
@@ -7,7 +9,8 @@
       android:name="io.flutter.app.FlutterApplication"
 
         android:label="teacher_side"
-        android:icon="@mipmap/ic_launcher">
+        tools:replace="android:label"
+        android:icon="@mipmap/launcher_icon">
 <!-- <service android:name="com.backendless.push.BackendlessFCMService">
   <intent-filter>
     <action android:name="com.google.firebase.MESSAGING_EVENT" />

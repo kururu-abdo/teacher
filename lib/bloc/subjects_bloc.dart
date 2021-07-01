@@ -101,6 +101,30 @@ Future<List<Lecture>> geLectures(Teacher teacher) async {
       print(e);
     }
   }
+Future<List<Map>> getMyTable2(Teacher teacher, Map day) async {
+    debugPrint(teacher.toJson().toString());
+
+    try {
+      QuerySnapshot data = await FirebaseFirestore.instance
+          .collection('table')
+          .where('subject.teacher_id', isEqualTo: teacher.id.toString())
+          .where('subject.semester', isEqualTo: teacher.semester.toJson())
+          .where('day', isEqualTo: day)
+          .get();
+      List<Map> subjects = [];
+      for (var item in data.docs) {
+        subjects.add(item.data());
+      }
+      return subjects;
+
+      subjects.forEach((element) {
+        debugPrint(element.toString());
+      });
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 
 
   Stream<List<Map>> getMyTable(Teacher teacher ,  Map day) async* {

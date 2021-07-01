@@ -40,6 +40,7 @@ AnimationConfiguration.staggeredList(
                 child: Container(
                   width: 300,
                   height: 70,
+                  color: Colors.green.withOpacity(0.5),
                   child: Center(
                     child: Text(
                       DAYS[i]['name'],
@@ -137,6 +138,7 @@ textDirection: TextDirection.rtl,
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
+                      color: Colors.green.withOpacity(0.5),
                       child: ListTile(
                         title: Text(snapshot.data[index]['subject']['name']),
                         subtitle: Text(snapshot.data[index]['subject']['level']
@@ -144,7 +146,7 @@ textDirection: TextDirection.rtl,
                             " " +
                             snapshot.data[index]['subject']['department']
                                 ['name']),
-                        trailing: Text(snapshot.data[index]['hall'] +
+                        trailing: Text(snapshot.data[index]['hall'] + " "+
                             snapshot.data[index]['from']),
                       ),
                     );

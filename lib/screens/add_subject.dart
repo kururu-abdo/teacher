@@ -339,8 +339,10 @@ Spacer() ,
                   print('notification status');
                   print(notification);
 
-                  Get.back();
                    LoadingDialog.hide(context);
+
+                                     Get.back();
+
                 } else {
                   Fluttertoast.showToast(
                       msg: "تأكد من اتصال البيانات",
