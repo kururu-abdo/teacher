@@ -3,7 +3,9 @@ import 'package:teacher_side/models/comment_model.dart';
 
 class CommentBloc {
   
+static  Future<String> getCommentDocumentId(String object_id)   async{
 
+}
 static Future<List<CommentModel>>  getObjectComments(String object_id)  async{
 List<CommentModel> comments =[];
 QuerySnapshot data = await FirebaseFirestore.instance

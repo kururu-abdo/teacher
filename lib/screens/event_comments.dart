@@ -1,11 +1,17 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_show_more/flutter_show_more.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:teacher_side/bloc/comment_bloc.dart';
 import 'package:teacher_side/bloc/user_bloc.dart';
 import 'package:teacher_side/models/chat_user.dart';
 import 'package:teacher_side/models/comment_model.dart';
+import 'package:teacher_side/models/event.dart';
+import 'package:teacher_side/utils/days.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 
@@ -17,7 +23,7 @@ class CommentsListKeyPrefix {
 }
 
 class EventComments extends StatefulWidget {
-  String object_id;
+ final  String object_id;
   EventComments(this.object_id);
 
   @override
@@ -37,10 +43,36 @@ TextEditingController _controller =  new TextEditingController();
     });
   }
 
+
+
+Event event;
+
+fetchEvent () async{
+
+   QuerySnapshot data = await FirebaseFirestore.instance
+        .collection('lecture-events')
+        .where('id', isEqualTo: widget.object_id)
+        .get();
+
+    if (data.docs.isNotEmpty) {
+      setState(() {
+        event = Event.fromJson(data.docs.first.data());
+      });
+    }
+}
+
+
+
   @override
   Widget build(BuildContext context) {
          CollectionReference commentsRef =
         FirebaseFirestore.instance.collection('comments');
+
+
+
+
+
+
  var userBloc = Provider.of<UserBloc>(context);
     var me =
         Commentator(userBloc.getUser().id, userBloc.getUser().name, 'أستاذ');
@@ -57,19 +89,96 @@ TextEditingController _controller =  new TextEditingController();
 
 
 
-        child: ExpansionTile(
-          leading: Icon(Icons.comment),
-          trailing: Text(comments.length.toString()),
-          title: Text("التعليقات"),
-          children: List<Widget>.generate(
-            comments.length,
-            (int index) => _SingleComment(
-              key: ValueKey("${CommentsListKeyPrefix.singleComment} $index"),
-              index: index,
-              commeents: comments,
-            ),
-          ),
-        ),
+        child:
+        
+        ListView(children: [
+
+           SizedBox(
+                height: 20,
+              ),
+ Card(
+                elevation: 16.0,
+                child: Container(
+                    height: 80,
+                    child: Center(
+                        child: Text(event != null ? event.title : ""))),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+
+Container(
+                height: MediaQuery.of(context).size.height * 2 / 3,
+                child: FutureBuilder<QuerySnapshot>(
+                  future: commentsRef
+                      .where('object_id', isEqualTo: widget.object_id)
+                      .get(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return Text('Something went wrong');
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text("Loading");
+                    }
+
+                    return ListView.builder(
+                      itemCount: snapshot.data.docs.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        debugPrint(snapshot.data.docs[index]
+                            .data()['time']
+                            .runtimeType
+                            .toString());
+                        return Container(
+                          margin: EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            color: Colors.green[200].withOpacity(0.5),
+                          ),
+                          child: Column(
+                            children: [
+                              ListTile(
+                                title: Text(snapshot.data.docs[index]
+                                    .data()['commentator']['name']),
+                                subtitle: Text(snapshot.data.docs[index]
+                                    .data()['commentator']['role']),
+                              ),
+                              ShowMoreText(
+                                snapshot.data.docs[index]
+                                    .data()['comment_text'],
+                                maxLength: 100,
+                                style:
+                                    TextStyle(fontSize: 12, color: Colors.grey),
+                                showMoreText: 'عرض اكثر',
+                                showMoreStyle: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).accentColor,
+                                ),
+                                shouldShowLessText: true,
+                                showLessText: 'عرض اقل',
+                              ),
+
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                              // Text(snapshot.data.docs[index].data()['time'].toString()),
+                              dateFormatWidget(
+                                  snapshot.data.docs[index].data()['time'])
+                            ],
+                          ),
+                        );
+                        return Text(
+                            snapshot.data.docs[index].data().toString());
+                      },
+                    );
+                  },
+                ),
+              ),
+        ],)
       ),
 
 floatingActionButton: FloatingActionButton(onPressed: () async{
@@ -80,6 +189,53 @@ floatingActionButton: FloatingActionButton(onPressed: () async{
 child: Text("تعليق"),
 ),
     );
+  }
+
+  String getDayText(int nowDay, int day) {
+    if (nowDay == day) {
+      return 'اليوم';
+    } else if (nowDay - day == 1) {
+      return 'الأمس';
+    } else {
+      return Days.values[day - 1].toString();
+    }
+  }
+
+  Widget dateFormatWidget(Timestamp timestamp) {
+    DateTime date = timestamp.toDate();
+    // var now = DateTime.now();
+    // var nowDay = now.weekday;
+    // var day = date.weekday;
+
+    var format = new DateFormat('d MMM, hh:mm a');
+    // var date = new DateTime.fromMillisecondsSinceEpoch(t);
+    var formattedDate = DateFormat.yMMMd().format(date); // Apr 8, 2020
+
+    var now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    var formattedToday = DateFormat.yMMMd().format(today);
+
+    final yesterday = DateTime(now.year, now.month, now.day - 1);
+    var formattedYesterDay = DateFormat.yMMMd().format(yesterday);
+
+    String time = '';
+
+    if (formattedDate == formattedToday) {
+      time = "اليوم";
+    } else if (formattedDate == formattedYesterDay) {
+      time = "الأمس";
+    } else {
+      time = formattedDate;
+    }
+
+    return Container(
+      child: Text(time),
+    );
+    // print(day);
+    // print(Days.values[Days.values[day].index]   );
+    // return Container(
+    //   child: Text(getDayText(nowDay, day)),
+    // );
   }
 
 

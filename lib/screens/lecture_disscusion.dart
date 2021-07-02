@@ -372,7 +372,8 @@ setState(() {
                             'screen': 'consults',
                            'data': {
                               "id": widget.data['id'].toString(),
-                              "type": 'comment'
+                              "type": 'lecture_comment', 
+
                             }
                           },
                           'to': '/topics/lecture${widget.data['id']}'

@@ -16,9 +16,13 @@ import 'package:teacher_side/bloc/main_bloc.dart';
 import 'package:teacher_side/bloc/services_provider.dart';
 import 'package:teacher_side/bloc/subjects_bloc.dart';
 import 'package:teacher_side/bloc/user_bloc.dart';
+import 'package:teacher_side/models/chat_user.dart';
 import 'package:teacher_side/models/notification.dart';
+import 'package:teacher_side/screens/chats/chat_page.dart';
 import 'package:teacher_side/screens/chats/chat_page_notif.dart';
+import 'package:teacher_side/screens/event_comments.dart';
 import 'package:teacher_side/screens/event_details_notif.dart';
+import 'package:teacher_side/screens/lecture_comments.dart';
 import 'package:teacher_side/screens/lecture_details_notif.dart';
 import 'package:teacher_side/screens/main_event_details.dart';
 import 'package:teacher_side/screens/notifcatin_page.dart';
@@ -54,7 +58,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         //   icon: 'launch_background',
         // ),
         // null
-      ));
+      ) ,  payload: json.encode(message.data['data']));
   DBProvider.db.newNotification(LocalNotification(
       title: notification.title,
       object: json.encode(message.data),
@@ -94,11 +98,27 @@ main(List<String> args) async {
   );
   await flutterLocalNotificationsPlugin.initialize(initializationSettings,
       onSelectNotification: (String payload) async {
-      debugPrint('notification payload: $payload');
- SchedulerBinding.instance.addPostFrameCallback((_) {
-          Get.toNamed('/notification');
 
-    });
+        var data =  json.decode(payload);
+
+if (data['type']=="message") {
+  var me = User.fromJson(data['receiver']);
+  var user  =  User.fromJson(data['sender']);
+  Get.to(ChatPage(me: me,user: user,));
+}else{
+ if (data['type']=="event") {
+   Get.to(EventComments(data['id']));
+ }
+    Get.to(LectureComments(data['id']));
+
+
+
+
+
+}
+
+      debugPrint('notification payload: $payload');
+
     
   });
   BackendlessInit().init();

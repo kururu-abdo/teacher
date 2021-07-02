@@ -130,14 +130,15 @@ double _sigmaX = 4; // from 0-10
                         });
                         _controller.text = '';
                         print('comment');
+if (widget.user.role == "طالب") {
 
-                        var response = await http.post(
-                          Uri.parse('https://fcm.googleapis.com/fcm/send'),
-                          headers: <String, String>{
-                            'Content-Type': 'application/json',
-                            'Authorization': 'key=$serverToken',
-                          },
-                          body: jsonEncode(
+      var response = await http.post(
+                            Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                            headers: <String, String>{
+                              'Content-Type': 'application/json',
+                              'Authorization': 'key=$serverToken',
+                            },
+                            body: jsonEncode(
 // <String ,dynamic>{
 //   "message":<String ,dynamic>{
 //   "topic" :"general" ,
@@ -158,28 +159,83 @@ double _sigmaX = 4; // from 0-10
 //   }
 // }
 
-                            <String, dynamic>{
-                              'notification': <String, dynamic>{
-                                'body':
-                                    'أستاذ   ارسل لك رسالة ${widget.me.name}',
-                                'title': ':رسالة جديدة'
+                              <String, dynamic>{
+                                'notification': <String, dynamic>{
+                                  'body':
+                                      'أستاذ   ارسل لك رسالة ${widget.me.name}',
+                                  'title': ':رسالة جديدة'
+                                },
+                                'priority': 'high',
+                                'data': <String, dynamic>{
+                                  'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                  'id': '1',
+                                  'status': 'done',
+                                  'screen': 'chat',
+                                  'data': <dynamic, dynamic>{
+                                    'sender': widget.me.toJson(),
+                                    'receiver': widget.user.toJson() ,
+                                    "type": "message"
+                                  }
+                                },
+                                'to': '/topics/${widget.user.id.toString()}'
                               },
-                              'priority': 'high',
-                              'data': <String, dynamic>{
-                                'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-                                'id': '1',
-                                'status': 'done',
-                                'screen': 'chat',
-                                'data': <dynamic, dynamic>{
-                                  'sender': widget.me.toJson(),
-                                  'receiver': widget.user.toJson()
-                                }
-                              },
-                              'to': '/topics/${widget.user.id.toString()}'
-                            },
-                          ),
-                        );
+                            ),
+                          );
 
+}else {
+      var response = await http.post(
+                            Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                            headers: <String, String>{
+                              'Content-Type': 'application/json',
+                              'Authorization': 'key=$serverToken',
+                            },
+                            body: jsonEncode(
+// <String ,dynamic>{
+//   "message":<String ,dynamic>{
+//   "topic" :"general" ,
+//  'to': await firebaseMessaging.getToken(),
+//   "notification": <String ,dynamic>{
+//         "body":"This is an FCM notification message!",
+//         "title":"FCM Message"
+//       },
+
+//   'priority': 'high',
+
+//   "data" : <dynamic ,dynamic>{
+//          'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+//          'id': '1',
+//          'status': 'done' ,
+//          'screen' :'Lectures'
+//       }
+//   }
+// }
+
+                              <String, dynamic>{
+                                'notification': <String, dynamic>{
+                                  'body':
+                                      'أستاذ   ارسل لك رسالة ${widget.me.name}',
+                                  'title': ':رسالة جديدة'
+                                },
+                                'priority': 'high',
+                                'data': <String, dynamic>{
+                                  'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+                                  'id': '1',
+                                  'status': 'done',
+                                  'screen': 'chat',
+                                  'data': <dynamic, dynamic>{
+                                    'sender': widget.me.toJson(),
+                                    'receiver': widget.user.toJson() ,
+                                    "type":"message"
+                                  }
+                                },
+                                'to': '/topics/supervisor${widget.user.id.toString()}'
+                              },
+                            ),
+                          );
+
+}
+  
+                    
                         LoadingIndicator(
                           indicatorType: Indicator.ballPulse,
                           color: Colors.white,

@@ -68,6 +68,7 @@ dependencies:
   ripple_effect: ^0.1.1
   circular_clip_route: ^0.2.0
   motion_widget: ^1.0.2
+  flutter_show_more: ^0.1.2
   http: ^0.13.3
   font_awesome_flutter: ^8.11.0
   loading_indicator: ^2.1.1

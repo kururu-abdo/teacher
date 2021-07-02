@@ -415,7 +415,8 @@ var data =   await comments.add({
                               'id': '1',
                               'status': 'done',
                               'screen': 'consults',
-                              'data':<String ,String>{"type":"event" ,
+                              'data':<String ,String>{
+                                "type":"event" ,
                                 "id":
                               widget.data['id'].toString()}
                             },
