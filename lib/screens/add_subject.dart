@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
-
+import 'package:sizer/sizer.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -56,44 +56,83 @@ class _NewLectureState extends State<NewLecture> {
       body: Form(
           key: _formKey,
           child: Column(children: <Widget>[
-            TextFormField(
-              controller: titleController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                labelText: 'عنوان المحاضرة' ,
-                labelStyle:   TextStyle(color: Colors.white),
-                  hintStyle: TextStyle(color: Colors.white),
-                 enabledBorder: UnderlineInputBorder(),
-                 border: UnderlineInputBorder()
-              
+            SizedBox(
+              height: 10,
+            ) ,
+            Container(
+
+    margin: EdgeInsets.all(10.0),
+decoration: BoxDecoration(
+  border: Border.all(width: 2,  color: Colors.black )
+),
+
+              child: TextFormField(
+                controller: titleController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  labelText: 'عنوان المحاضرة' ,
+                  
+                
+                ),
+                
+                // The validator receives the text that the user has entered.
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'العنوان مطلوب';
+                  }
+                  return null;
+                },
               ),
-              
-              // The validator receives the text that the user has entered.
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'العنوان مطلوب';
-                }
-                return null;
-              },
             ),
 Spacer() ,
-          
-            MaterialButton(
-                minWidth: 250,
-                color: Colors.yellow,
-                shape: RoundedRectangleBorder(
 
-                  borderRadius :BorderRadius.all(Radius.circular(10.0))
+
+Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    if (_formKey.currentState.validate()) {
+                    Get.to(() => AddFilesToLecure(
+                            subject: widget.subject,
+                            title: titleController.text,
+                          ));
+ 
+                    }
+                  },
+                  child: Container(
+                    width: 100.0.sp,
+                    height: 40.0.sp,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.black),
+                        color: Colors.green,
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    child: Center(
+                        child: Text(
+                      "متابعة",
+                      style: TextStyle(color: Colors.white),
+                    )),
+                  ),
                 ),
-                onPressed: () async {
-if (_formKey.currentState.validate()) {
-Get.to(()=>AddFilesToLecure(subject: widget.subject , title: titleController.text,))  ;
-}
+                InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Container(
+                    width: 100.0.sp,
+                    height: 40.0.sp,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.black),
+                        borderRadius: BorderRadius.all(Radius.circular(25))),
+                    child: Center(child: Text("إلغاء")),
+                  ),
+                )
+              ],
+            ),
+                    
 
 
 
-                },
-                child: Text('متابعة '))
 
             // Add TextFormFields and ElevatedButton here.
           ])),
@@ -489,7 +528,8 @@ _pickDocument();
             'id': '1',
             'status': 'done',
             'screen': 'lecture_details',
-            'lecture': lecture_data.data()
+             'data':
+           {"id": lecture_data.data()['id'] , "type":'lecture'}
           },
           'to':
               '/topics/${widget.subject.department.dept_code}${widget.subject.level.id.toString()}'

@@ -56,6 +56,7 @@ class _HomeState extends State<Home> {
   void _bottomSheetMore(context) {
     showModalBottomSheet(
       context: context,
+      
       builder: (builder) {
         return new Container(
           padding: EdgeInsets.only(
@@ -64,11 +65,12 @@ class _HomeState extends State<Home> {
             top: 5.0,
             bottom: 5.0,
           ),
+          margin: EdgeInsets.only(left: 5,  right: 5),
           decoration: new BoxDecoration(
               color: Colors.white,
               borderRadius: new BorderRadius.only(
-                  topLeft: const Radius.circular(10.0),
-                  topRight: const Radius.circular(10.0))),
+                  topLeft: const Radius.circular(20.0),
+                  topRight: const Radius.circular(20.0))),
           child: new Wrap(
             children: <Widget>[
               new ListTile(

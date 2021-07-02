@@ -67,8 +67,28 @@ Future updateNotfications(Map<dynamic ,dynamic> data) async {
 
     yield evnt;
   }
+ Future<void> deleteLectureFile(String file, String doc) async {
+    debugPrint('removing...');
+    var vals = [];
+    vals.add(file);
+    await FirebaseFirestore.instance
+        .collection('lectures')
+        .doc(doc)
+        .update({"files": FieldValue.arrayRemove(vals)});
 
+    //  future.dismiss();
+  }
+ Future<void> deleteEventFile(String file, String doc) async {
+    debugPrint('removing...');
+    var vals = [];
+    vals.add(file);
+    await FirebaseFirestore.instance
+        .collection('events')
+        .doc(doc)
+        .update({"files": FieldValue.arrayRemove(vals)});
 
+    //  future.dismiss();
+  }
 Stream<List<ClassSubject>> fetch_subjects2(Teacher teacher , Semester semester) async*{
   
   QuerySnapshot data =await FirebaseFirestore.instance

@@ -74,6 +74,8 @@ main(List<String> args) async {
   await Firebase.initializeApp();
   await GetStorage.init();
   await FlutterDownloader.initialize();
+  FlutterDownloader.registerCallback(TestClass.callback);
+
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -230,4 +232,7 @@ class HomePage extends StatelessWidget {
         });
      
   }
+}
+class TestClass{
+     static void callback(String id, DownloadTaskStatus status, int progress) {}
 }

@@ -223,6 +223,10 @@ var uuid = Uuid(
 
 
    });
+
+
+
+   
      _controller.text='';
         print('comment');
       }),   

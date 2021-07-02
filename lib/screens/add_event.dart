@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:sizer/sizer.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -69,49 +69,88 @@ class _NewLectureState extends State<NewEvent> {
           child: Form(
               key: _formKey,
               child: Column(children: <Widget>[
-                TextFormField(
-                  controller: titleController,
-
-                  maxLines: 10,
-
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(8.0),
-                    labelText: 'الخبر...',
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
-                        borderSide: new BorderSide(color: Colors.blue)),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.orange),
-                    ),
+                SizedBox(height: 10,) ,
+                Container(
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 2 ,  color: Colors.black)
                   ),
+                  child: TextFormField(
+                    controller: titleController,
 
-                  // The validator receives the text that the user has entered.
+                    maxLines: 10,
 
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return 'Please enter some text';
-                    }
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(8.0),
+                      labelText: 'الخبر...',
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: new UnderlineInputBorder(
+                          borderSide: new BorderSide(color: Colors.blue)),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.orange),
+                      ),
+                    ),
 
-                    return null;
-                  },
+                    // The validator receives the text that the user has entered.
+
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+
+                      return null;
+                    },
+                  ),
                 ),
 Spacer() ,
- MaterialButton(
-                minWidth: 250,
-                color: Colors.yellow,
-                shape: RoundedRectangleBorder(
 
-                  borderRadius :BorderRadius.all(Radius.circular(10.0))
+
+Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        if (_formKey.currentState.validate()) {
+                        Get.to(() => AddFiles(
+                                data: widget.data,
+                                title: titleController.text,
+                              ));
+
+                        }
+                      },
+                      child: Container(
+                        width: 100.0.sp,
+                        height: 40.0.sp,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.black),
+                            color: Colors.green,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25))),
+                        child: Center(
+                            child: Text(
+                          "متابعة",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Container(
+                        width: 100.0.sp,
+                        height: 40.0.sp,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.black),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25))),
+                        child: Center(child: Text("إلغاء")),
+                      ),
+                    )
+                  ],
                 ),
-                onPressed: () async {
-if (_formKey.currentState.validate()) {
-Get.to(()=>AddFiles(data:widget.data, title: titleController.text,))  ;
-}
+                    
 
-
-
-                },
-                child: Text('متابعة ')),
                 
 
                 // Add TextFormFields and ElevatedButton here.
@@ -495,7 +534,7 @@ Spacer()
 
         <String, dynamic>{
           'notification': <String, dynamic>{
-            'body': 'الاستاذ عندر ليكم جديد',
+            'body': 'الاستاذ عندو ليكم  خبر جديد',
             'title': 'اعلات'
           },
           'topic': 'topics/general',
@@ -505,7 +544,8 @@ Spacer()
             'id': '1',
             'status': 'done',
             'screen': 'event_details',
-            'event': event_data.data()
+            'data':
+           {"id": event_data.data()['id'] , "type":'event'}
           },
           'to':
               '/topics/${widget.data['dept']['name']}${widget.data['level']['name']}'

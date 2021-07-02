@@ -6,11 +6,13 @@ import 'package:photo_view/photo_view_gallery.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:teacher_side/models/subject.dart';
 import 'package:teacher_side/models/teacher.dart';
 import 'package:teacher_side/utils/constants.dart';
 import 'package:teacher_side/utils/days.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
+import 'package:http/http.dart' as http;
 class EventDeitals extends StatefulWidget {
 
   final Map  data;
@@ -30,7 +32,21 @@ TextEditingController _controller =  new TextEditingController();
 void initState() { 
   super.initState();
   get_teacher();
+  fetchSubjectData();
 }
+ClassSubject classSubject;
+fetchSubjectData() async {
+    var data = await FirebaseFirestore.instance
+        .collection("subject")
+        .where("id", isEqualTo: widget.data['id'])
+        .get();
+
+    if (data.docs.length > 0) {
+      setState(() {
+        classSubject = ClassSubject.fromJson(data.docs.first.data());
+      });
+    }
+  }
 Teacher teacher;
 get_teacher(){
   setState(() {
@@ -68,7 +84,7 @@ children: [
 
     ),
 
-    child: Stack(children: [
+    child: Column(children: [
 Align(
 alignment: Alignment.topCenter,
 child: Text('${widget.data['name']}'),
@@ -300,8 +316,11 @@ Container(
                       margin: EdgeInsets.all(8.0),
                         padding: EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                            // borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                            color: Colors.blue[300]),
+                             borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                                      color: Colors.green[200].withOpacity(0.5),
+
+                            
+                            ),
             child: Column(
               children: [
                   ListTile(
@@ -357,14 +376,14 @@ Container(
  bottomNavigationBar: Padding(padding: MediaQuery.of(context).viewInsets,
    child:TextField(
     controller: _controller,
-    maxLines: 3,
+    maxLines: 2,
      decoration: InputDecoration(
        
      icon: IconButton(icon: Icon(Icons.comment ,  color: Colors.blue,), onPressed: () async{
 var uuid = Uuid(
     options: {'grng': UuidUtil.cryptoRNG}
 );
-   await comments.add({
+var data =   await comments.add({
      'id':uuid.v1(),
       'object_id': widget.data['id'],
        'comment_text':  _controller.text ,
@@ -377,6 +396,34 @@ var uuid = Uuid(
 
 
    });
+    var response = await http.post(
+                      Uri.parse('https://fcm.googleapis.com/fcm/send')  ,
+                        headers: <String, String>{
+                          'Content-Type': 'application/json',
+                          'Authorization': 'key=$serverToken',
+                        },
+                        body: jsonEncode(
+                          <String, dynamic>{
+                            'notification': <String, dynamic>{
+                              'body':
+                                  'تم االتعليق    من قبل الاستاذ ',
+                              'title': ':تم إضافة تعليق'
+                            },
+                            'priority': 'high',
+                            'data': <String, dynamic>{
+                              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+                              'id': '1',
+                              'status': 'done',
+                              'screen': 'consults',
+                              'data':<String ,String>{"type":"event" ,
+                                "id":
+                              widget.data['id'].toString()}
+                            },
+                            'to':
+                                '/topics/event${widget.data['id']}'
+                          },
+                        ),
+                      );
      _controller.text='';
         print('comment');
       }),   
