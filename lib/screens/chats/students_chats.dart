@@ -57,6 +57,16 @@ class _ChatsState extends State<Chats> {
                     child: CircularProgressIndicator(),
                   );
                 }
+                if (snapshot.hasError) {
+                  return Center(
+                      child:
+                          Text("خطأ في  الاتصال بالخادم نرجو المحاولة لاحقا"));
+                }
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
                 return ListView.builder(
                   //TODOS:students chat with me
                   itemCount: snapshot.data.length,

@@ -10,10 +10,7 @@ import 'package:teacher_side/screens/notifcatin_page.dart';
 import 'package:teacher_side/utils/constants.dart';
 import 'package:teacher_side/utils/local_datase.dart';
 
-
 class FCMConfig {
-  FCMConfig() ;
-
   static fcmConfig() async {
     debugPrint('config notfication');
 
@@ -26,21 +23,26 @@ class FCMConfig {
 
         var result = await DBProvider.db.newNotification(LocalNotification(
             title: notification.title,
-            body : notification.body,
+            body: notification.body,
             object: json.encode(message.data),
-            time: DateTime.now().millisecondsSinceEpoch
-            
-            ));
+            time: DateTime.now().millisecondsSinceEpoch));
 
-Get.defaultDialog(title:'اخطار جديد'   ,  
-content: Text("هنالك اخطار جديد"),
-
-actions: [TextButton(onPressed: (){
-  Get.toNamed('/notification');
-}, 
-
-child: Text('حسنا'  ))] ,    );
-
+        Get.defaultDialog(
+          title: 'اخطار جديد',
+          content: Text("هنالك اخطار جديد"),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Get.toNamed('/notification');
+                },
+                child: Text('حسنا')),
+            TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text('تجاهل'))
+          ],
+        );
 
         // debugPrint('/////////////////////////////');
         // debugPrint(result.toString());
@@ -51,7 +53,7 @@ child: Text('حسنا'  ))] ,    );
         //     NotificationDetails(
         //     android:    AndroidNotificationDetails(
         //             'channel', 'channelName', 'channelDescription'),
-                
+
         //         // android:
         //         //  AndroidNotificationDetails(
         //         //   channel.id,
@@ -78,10 +80,28 @@ child: Text('حسنا'  ))] ,    );
             body: notification.body,
             object: json.encode(message.data),
             time: DateTime.now().millisecondsSinceEpoch));
-      
-      }
 
-    
+        flutterLocalNotificationsPlugin.show(
+            notification?.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                  'channel', 'channelName', 'channelDescription'),
+
+              // android:
+              //  AndroidNotificationDetails(
+              //   channel.id,
+              //   channel.name,
+              //   channel.description,
+              //   // TODO add a proper drawable resource to android, for now using
+              //   //      one that already exists in example app.
+              //   icon: 'launch_background',
+              // ),
+              // null
+            ),
+            payload: json.encode(message.data['data']));
+      }
     });
 
 // RemoteMessage initialMessage =
@@ -92,36 +112,35 @@ child: Text('حسنا'  ))] ,    );
 //     if (initialMessage?.data['type'] != 'chat') {
 //    Get.toNamed('notification');
 //     }
-
-  
   }
 
-static unsubsribeToAll()  async{
-      getStorage.read("topics", );
-      List  topics =  json.decode( getStorage.read("topics", ));
+  static unsubsribeToAll() async {
+    getStorage.read(
+      "topics",
+    );
+    List topics = json.decode(getStorage.read(
+      "topics",
+    ));
 
-      topics.forEach((element) {debugPrint(element);});
+    topics.forEach((element) {
+      debugPrint(element);
+    });
+  }
 
-}
-
-static subscripeToTopic(String topic){
-  debugPrint('subcribe to topic  '+ topic);
+  static subscripeToTopic(String topic) {
+    debugPrint('subcribe to topic  ' + topic);
     topics.add(topic);
 
     getStorage.write("topics", json.encode(topics));
 
+    FirebaseMessaging.instance.subscribeToTopic(topic);
+  }
 
- FirebaseMessaging.instance.subscribeToTopic(topic);
-}
-static unSubscripeToTopic(String topic) {
- FirebaseMessaging.instance.unsubscribeFromTopic("teacher"+topic);
-}
-static Future<String>  getToken() async{
-  return await  FirebaseMessaging.instance.getToken();
-}
+  static unSubscripeToTopic(String topic) {
+    FirebaseMessaging.instance.unsubscribeFromTopic("teacher" + topic);
+  }
 
-
-
-
-
+  static Future<String> getToken() async {
+    return await FirebaseMessaging.instance.getToken();
+  }
 }

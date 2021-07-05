@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:teacher_side/models/chat_user.dart';
 
 import 'package:teacher_side/models/notification.dart';
+import 'package:teacher_side/screens/chats/chat_page.dart';
 import 'package:teacher_side/utils/local_datase.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -44,22 +46,25 @@ class _NotificationPageState extends State<NotificationPage> {
                       onTap: () {
                         debugPrint(item.object);
                         var object = json.decode(item.object);
+                        var data = json.decode(object["data"]);
                         debugPrint(object.toString());
-                        var screen = object['screen'];
                         //chat
-
+                        if (data["type"] == "message") {
+                          var me = User.fromJson(data["receiver"]);
+                          var user = User.fromJson(data["sender"]);
+                          Get.to(ChatPage(me: me, user: user));
+                        }
                         //event
 
                         //comment
 
                         //warning
-                      
                       },
                       child: Container(
                         width: double.infinity,
                         child: Card(
                           elevation: 8.0,
-                          color :  item.isRead?Colors.white:Colors.lightBlue ,
+                          color: item.isRead ? Colors.white : Colors.lightBlue,
                           child: Column(
                             children: [
                               Row(
@@ -76,13 +81,10 @@ class _NotificationPageState extends State<NotificationPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   FlatButton(
-                                      onPressed: ()async {
+                                      onPressed: () async {
+                                        await DBProvider.db.delete(item.id);
 
-
-
-await DBProvider.db.delete(item.id);
-
-Fluttertoast.showToast(
+                                        Fluttertoast.showToast(
                                             msg: "تم مسح الاشعار ",
                                             toastLength: Toast.LENGTH_SHORT,
                                             gravity: ToastGravity.CENTER,
@@ -90,23 +92,16 @@ Fluttertoast.showToast(
                                             backgroundColor: Colors.green,
                                             textColor: Colors.white,
                                             fontSize: 16.0);
-setState(() {
-  
-});
-
-                                      }, child: Text("حذف")),
+                                        setState(() {});
+                                      },
+                                      child: Text("حذف")),
                                   FlatButton(
-                                      onPressed: ()async {
-
-
-var notification =   item;
-notification.isRead =  true;
-DBProvider.db.updateNotifica(notification);
-setState(() {
-  
-});
-
-
+                                      onPressed: () async {
+                                        var notification = item;
+                                        notification.isRead = true;
+                                        DBProvider.db
+                                            .updateNotifica(notification);
+                                        setState(() {});
                                       },
                                       child: Text("تحديد كمقروء")),
                                 ],

@@ -60,6 +60,7 @@ class _MyPrpfoleState extends State<MyPrpfole> {
     //teachers.where('id',isEqualTo: widget.teacher.id);
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
         actions: [
           IconButton(
               icon: Icon(FontAwesomeIcons.edit),
@@ -72,11 +73,6 @@ class _MyPrpfoleState extends State<MyPrpfole> {
                 Get.to(HomePage());
               }),
         ],
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        )),
         centerTitle: true,
         title: Text('الملف الشخصي'),
       ),
@@ -93,15 +89,16 @@ class _MyPrpfoleState extends State<MyPrpfole> {
             Map<String, dynamic> data = snapshot.data.docs.first.data();
 
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(0.0),
               child: ListView(
                 children: <Widget>[
                   Container(
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [Colors.redAccent, Colors.pinkAccent])),
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.green, Colors.greenAccent]),
+                      ),
                       child: Container(
                         width: double.infinity,
                         height: 350.0,
@@ -178,14 +175,14 @@ class _MyPrpfoleState extends State<MyPrpfole> {
                               children: [
                                 Center(
                                     child: ListTile(
-                                  title: Text('${data['phone']}' ,  style: TextStyle(color: Colors.white),),
-                                )
-
-
-                                    ),
+                                  title: Text(
+                                    '${data['phone']}',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                )),
                                 Center(
                                     child: ListTile(
-                                  title: Text('${data['address']}' ,
+                                  title: Text('${data['address']}',
                                       style: TextStyle(color: Colors.white)),
                                 )),
                                 //                         Center(
@@ -210,7 +207,7 @@ class _MyPrpfoleState extends State<MyPrpfole> {
                               ],
                             )),
                           )
-                        
+
                           // ),
                         ],
                       ),
@@ -229,20 +226,14 @@ class _MyPrpfoleState extends State<MyPrpfole> {
           );
         },
       ),
-
-      floatingActionButton: FloatingActionButton(onPressed: (){
-
-Get.to(EditProfile());
-      } ,
-      
-      child: Icon(Icons.edit),
-      
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.to(EditProfile());
+        },
+        child: Icon(Icons.edit),
       ),
     );
   }
-
-
-
 }
 
 class UserProfilePage extends StatelessWidget {

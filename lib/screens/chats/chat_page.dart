@@ -15,6 +15,7 @@ import 'package:teacher_side/models/chat_user.dart';
 import 'package:teacher_side/models/message.dart';
 import 'package:teacher_side/models/teacher.dart';
 import 'package:teacher_side/utils/constants.dart';
+import 'package:teacher_side/utils/ui/app_colors.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 
@@ -30,7 +31,7 @@ class _MyHomePageState extends State<ChatPage> {
   TextEditingController _controller = new TextEditingController();
 
   ScrollController _scrollController = ScrollController();
-double _sigmaX = 4; // from 0-10
+  double _sigmaX = 4; // from 0-10
   double _sigmaY = 4; // from 0-10
   double _opacity = 0.6; // from 0-1.0
   bool showBlur = true;
@@ -52,7 +53,7 @@ double _sigmaX = 4; // from 0-10
                   icon: Icon(FontAwesomeIcons.facebookMessenger),
                   onPressed: () {
                     Get.back();
-                  })
+                  }),
             ],
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -60,13 +61,13 @@ double _sigmaX = 4; // from 0-10
               bottomRight: Radius.circular(20),
             )),
             centerTitle: true,
-            title: Text(widget.user.name),
+            title: Text(widget.user.name + "-" + " " + widget.user.role),
           ),
           body: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('messages')
                   .where('chat_id',
-                      isEqualTo: widget.user.name + widget.me.name)
+                      isEqualTo: widget.user.id.toString() + widget.me.id)
                   .orderBy('time', descending: false)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -99,7 +100,7 @@ double _sigmaX = 4; // from 0-10
                                         chat_user.User.fromJson(
                                             widget.me.toJson())
                                     ? Colors.grey
-                                    : Colors.purple,
+                                    : Colors.green[300].withOpacity(0.5),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20))),
                             margin: EdgeInsets.all(10.0),
@@ -117,11 +118,12 @@ double _sigmaX = 4; // from 0-10
               controller: _controller,
               decoration: InputDecoration(
                   icon: IconButton(
-                      icon: Icon(Icons.message, color: Colors.blueAccent),
+                      icon: Icon(Icons.message, color: Colors.green),
                       onPressed: () async {
                         var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
                         await chats.add({
-                          'chat_id': widget.user.name + widget.me.name,
+                          'chat_id': widget.user.id.toString() +
+                              widget.me.id.toString(),
                           'id': uuid.v1(),
                           'message': _controller.text,
                           'time': Timestamp.now(),
@@ -130,9 +132,8 @@ double _sigmaX = 4; // from 0-10
                         });
                         _controller.text = '';
                         print('comment');
-if (widget.user.role == "طالب") {
-
-      var response = await http.post(
+                        if (widget.user.role == "طالب") {
+                          var response = await http.post(
                             Uri.parse('https://fcm.googleapis.com/fcm/send'),
                             headers: <String, String>{
                               'Content-Type': 'application/json',
@@ -173,7 +174,7 @@ if (widget.user.role == "طالب") {
                                   'screen': 'chat',
                                   'data': <dynamic, dynamic>{
                                     'sender': widget.me.toJson(),
-                                    'receiver': widget.user.toJson() ,
+                                    'receiver': widget.user.toJson(),
                                     "type": "message"
                                   }
                                 },
@@ -181,9 +182,8 @@ if (widget.user.role == "طالب") {
                               },
                             ),
                           );
-
-}else {
-      var response = await http.post(
+                        } else {
+                          var response = await http.post(
                             Uri.parse('https://fcm.googleapis.com/fcm/send'),
                             headers: <String, String>{
                               'Content-Type': 'application/json',
@@ -224,22 +224,16 @@ if (widget.user.role == "طالب") {
                                   'screen': 'chat',
                                   'data': <dynamic, dynamic>{
                                     'sender': widget.me.toJson(),
-                                    'receiver': widget.user.toJson() ,
-                                    "type":"message"
+                                    'receiver': widget.user.toJson(),
+                                    "type": "message"
                                   }
                                 },
-                                'to': '/topics/supervisor${widget.user.id.toString()}'
+                                'to':
+                                    '/topics/supervisor${widget.user.id.toString()}'
                               },
                             ),
                           );
-
-}
-  
-                    
-                        LoadingIndicator(
-                          indicatorType: Indicator.ballPulse,
-                          color: Colors.white,
-                        );
+                        }
 
                         _scrollController.animateTo(
                             _scrollController.position.maxScrollExtent,

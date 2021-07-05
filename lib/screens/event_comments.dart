@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_show_more/flutter_show_more.dart';
@@ -23,7 +21,7 @@ class CommentsListKeyPrefix {
 }
 
 class EventComments extends StatefulWidget {
- final  String object_id;
+  final String object_id;
   EventComments(this.object_id);
 
   @override
@@ -32,7 +30,7 @@ class EventComments extends StatefulWidget {
 
 class _LectureCommentsState extends State<EventComments> {
   List<CommentModel> comments = [];
-TextEditingController _controller =  new TextEditingController();
+  TextEditingController _controller = new TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -43,13 +41,10 @@ TextEditingController _controller =  new TextEditingController();
     });
   }
 
+  Event event;
 
-
-Event event;
-
-fetchEvent () async{
-
-   QuerySnapshot data = await FirebaseFirestore.instance
+  fetchEvent() async {
+    QuerySnapshot data = await FirebaseFirestore.instance
         .collection('lecture-events')
         .where('id', isEqualTo: widget.object_id)
         .get();
@@ -59,21 +54,14 @@ fetchEvent () async{
         event = Event.fromJson(data.docs.first.data());
       });
     }
-}
-
-
+  }
 
   @override
   Widget build(BuildContext context) {
-         CollectionReference commentsRef =
+    CollectionReference commentsRef =
         FirebaseFirestore.instance.collection('comments');
 
-
-
-
-
-
- var userBloc = Provider.of<UserBloc>(context);
+    var userBloc = Provider.of<UserBloc>(context);
     var me =
         Commentator(userBloc.getUser().id, userBloc.getUser().name, 'أستاذ');
     return Scaffold(
@@ -82,32 +70,24 @@ fetchEvent () async{
         title: Text("التعليقات"),
         centerTitle: true,
       ),
-      body:
-      
-      Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-
-
-
-        child:
-        
-        ListView(children: [
-
-           SizedBox(
+      body: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: ListView(
+            children: [
+              SizedBox(
                 height: 20,
               ),
- Card(
+              Card(
                 elevation: 16.0,
                 child: Container(
                     height: 80,
-                    child: Center(
-                        child: Text(event != null ? event.title : ""))),
+                    child:
+                        Center(child: Text(event != null ? event.title : ""))),
               ),
               SizedBox(
                 height: 10,
               ),
-
-Container(
+              Container(
                 height: MediaQuery.of(context).size.height * 2 / 3,
                 child: FutureBuilder<QuerySnapshot>(
                   future: commentsRef
@@ -178,16 +158,14 @@ Container(
                   },
                 ),
               ),
-        ],)
+            ],
+          )),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await _displayTextInputDialog(context);
+        },
+        child: Text("تعليق"),
       ),
-
-floatingActionButton: FloatingActionButton(onPressed: () async{
-
-  await _displayTextInputDialog( context);
-},
-
-child: Text("تعليق"),
-),
     );
   }
 
@@ -238,34 +216,29 @@ child: Text("تعليق"),
     // );
   }
 
-
   Future<void> _displayTextInputDialog(BuildContext context) async {
-     CollectionReference commentsRef =
+    CollectionReference commentsRef =
         FirebaseFirestore.instance.collection('comments');
-    var userBloc = Provider.of<UserBloc>(context ,listen: false);
+    var userBloc = Provider.of<UserBloc>(context, listen: false);
     var me =
         Commentator(userBloc.getUser().id, userBloc.getUser().name, 'أستاذ');
-   return showDialog(
-       context: context,
-       builder: (context) {
-         return AlertDialog(
-           title: Text('اضف تعليق'),
-          
-           content: TextField(
-             
-             controller:_controller,
-             decoration: InputDecoration(
-               errorText: "قم بكتابة نص التعليق",
-               hintText: "التعليق..."),
-           ),
-
-       actions: [
-          FlatButton(
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('اضف تعليق'),
+            content: TextField(
+              controller: _controller,
+              decoration: InputDecoration(
+                  errorText: "قم بكتابة نص التعليق", hintText: "التعليق..."),
+            ),
+            actions: [
+              FlatButton(
                 color: Colors.green,
                 textColor: Colors.white,
                 child: Text('OK'),
-                onPressed: () async{
-                   var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
+                onPressed: () async {
+                  var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
                   await commentsRef.add({
                     'id': uuid.v1(),
                     'object_id': widget.object_id,
@@ -275,19 +248,13 @@ child: Text("تعليق"),
                   });
                   _controller.text = '';
                   setState(() {});
-Get.back();
+                  Get.back();
                 },
               ),
-       ],
-
-         );}
-         );
-
-       
+            ],
+          );
+        });
   }
-
-
-
 }
 
 class _SingleComment extends StatelessWidget {
