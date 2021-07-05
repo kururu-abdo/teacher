@@ -28,6 +28,7 @@ import 'package:teacher_side/screens/main_event_details.dart';
 import 'package:teacher_side/screens/notifcatin_page.dart';
 import 'package:teacher_side/screens/welcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:teacher_side/utils/app.dart';
 import 'package:teacher_side/utils/backendless_init.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:teacher_side/utils/fcm_config.dart';
@@ -209,29 +210,33 @@ class HomePage extends StatelessWidget {
           //   onSecondary: Colors.black,
           //   onPrimary: Colors.white,
           // )),
+          navigatorKey: App().materialKey,
           routes: {NotificationPage.page_id: (context) => NotificationPage()},
           home: ChangeNotifierProvider(
               create: (BuildContext context) {
                 return MainBloc();
               },
-              child: LoadingProvider(
-                  themeData: LoadingThemeData(
-                    loadingBackgroundColor: Colors.white,
-                    backgroundColor: Colors.black54,
-                  ),
-                  loadingWidgetBuilder: (ctx, data) {
-                    return Center(
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: Container(
-                          child: CupertinoActivityIndicator(),
-                          color: Colors.blue,
+              builder: (context, child) {
+                return LoadingProvider(
+                    themeData: LoadingThemeData(
+                      loadingBackgroundColor: Colors.white,
+                      backgroundColor: Colors.black54,
+                    ),
+                    loadingWidgetBuilder: (ctx, data) {
+                      return Center(
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Container(
+                            child: CupertinoActivityIndicator(),
+                            color: Colors.blue,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: SplashScreen())),
+                      );
+                    },
+                    child: child);
+              },
+              child: SplashScreen()),
         );
       });
     });

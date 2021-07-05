@@ -162,9 +162,8 @@ class _MyHomePageState extends State<ChatPage> {
 
                               <String, dynamic>{
                                 'notification': <String, dynamic>{
-                                  'body':
-                                      'أستاذ   ارسل لك رسالة ${widget.me.name}',
-                                  'title': ':رسالة جديدة'
+                                  'body': _controller.text,
+                                  'title': ' ${widget.me.name}  استاذ'
                                 },
                                 'priority': 'high',
                                 'data': <String, dynamic>{
@@ -212,9 +211,8 @@ class _MyHomePageState extends State<ChatPage> {
 
                               <String, dynamic>{
                                 'notification': <String, dynamic>{
-                                  'body':
-                                      'أستاذ   ارسل لك رسالة ${widget.me.name}',
-                                  'title': ':رسالة جديدة'
+                                  'body': _controller.text,
+                                  'title': ' ${widget.me.name}  استاذ'
                                 },
                                 'priority': 'high',
                                 'data': <String, dynamic>{

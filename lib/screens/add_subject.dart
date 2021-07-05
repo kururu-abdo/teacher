@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:sizer/sizer.dart';
 import 'package:backendless_sdk/backendless_sdk.dart';
@@ -37,13 +38,12 @@ class _NewLectureState extends State<NewLecture> {
   @override
   void initState() {
     super.initState();
-  
-      BackendlessInit().init();
 
+    BackendlessInit().init();
   }
 
   final _formKey = GlobalKey<FormState>();
-    TextEditingController titleController = new TextEditingController();
+  TextEditingController titleController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,23 +58,18 @@ class _NewLectureState extends State<NewLecture> {
           child: Column(children: <Widget>[
             SizedBox(
               height: 10,
-            ) ,
+            ),
             Container(
-
-    margin: EdgeInsets.all(10.0),
-decoration: BoxDecoration(
-  border: Border.all(width: 2,  color: Colors.black )
-),
-
+              margin: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                  border: Border.all(width: 2, color: Colors.black)),
               child: TextFormField(
                 controller: titleController,
                 maxLines: 3,
                 decoration: InputDecoration(
-                  labelText: 'عنوان المحاضرة' ,
-                  
-                
+                  labelText: 'عنوان المحاضرة',
                 ),
-                
+
                 // The validator receives the text that the user has entered.
                 validator: (value) {
                   if (value.isEmpty) {
@@ -84,20 +79,18 @@ decoration: BoxDecoration(
                 },
               ),
             ),
-Spacer() ,
+            Spacer(),
 
-
-Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
                   onTap: () {
                     if (_formKey.currentState.validate()) {
-                    Get.to(() => AddFilesToLecure(
+                      Get.to(() => AddFilesToLecure(
                             subject: widget.subject,
                             title: titleController.text,
                           ));
- 
                     }
                   },
                   child: Container(
@@ -129,10 +122,6 @@ Row(
                 )
               ],
             ),
-                    
-
-
-
 
             // Add TextFormFields and ElevatedButton here.
           ])),
@@ -153,15 +142,14 @@ Row(
 class AddFilesToLecure extends StatefulWidget {
   final String title;
   final ClassSubject subject;
-  const AddFilesToLecure({Key key ,this.subject ,  this.title}) : super(key: key);
+  const AddFilesToLecure({Key key, this.subject, this.title}) : super(key: key);
 
   @override
   _AddFilesToLecureState createState() => _AddFilesToLecureState();
 }
 
 class _AddFilesToLecureState extends State<AddFilesToLecure> {
-
-Department dept;
+  Department dept;
   TextEditingController titleController = new TextEditingController();
   List<File> LecureFiles = [];
   List FilesTouploads = [];
@@ -175,45 +163,40 @@ Department dept;
   bool _iosPublicDataUTI = true;
   bool _checkByCustomExtension = false;
   bool _checkByMimeType = false;
- static const String SERVER_URL = "https://api.backendless.com";
+  static const String SERVER_URL = "https://api.backendless.com";
   static const String APPLICATION_ID = "F698C529-1FF3-871A-FF6D-52A0154D3600";
   static const String ANDROID_API_KEY = "3BA6F57F-CA1D-43E5-AA56-AEBFDFD5982B";
   static const String IOS_API_KEY = "72521EEB-F3A3-40E4-A1C6-18A539269C0D";
   static const String JS_API_KEY = "5EB0896C-52DA-477C-AE1B-99AE73291C23";
 
-  void initPressed() async{
- await Backendless.setUrl(SERVER_URL);
+  void initPressed() async {
+    await Backendless.setUrl(SERVER_URL);
 
-
-
-
-  await   Backendless.initApp(
-      
-        applicationId: APPLICATION_ID,
-        androidApiKey: ANDROID_API_KEY,
-        iosApiKey: IOS_API_KEY,
-        // jsApiKey: JS_KEY,
-        );
+    await Backendless.initApp(
+      applicationId: APPLICATION_ID,
+      androidApiKey: ANDROID_API_KEY,
+      iosApiKey: IOS_API_KEY,
+      // jsApiKey: JS_KEY,
+    );
   }
 
-@override
-void initState() { 
-  super.initState();
-  BackendlessInit().init();
-  initPressed();
+  @override
+  void initState() {
+    super.initState();
+    BackendlessInit().init();
+    initPressed();
     Backendless.initApp(
         applicationId: APPLICATION_ID,
         androidApiKey: ANDROID_API_KEY,
         iosApiKey: IOS_API_KEY);
-
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
-        var serviceProvider = Provider.of<ServiceProvider>(context);
+    var serviceProvider = Provider.of<ServiceProvider>(context);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: new AppBar(
         title: Text("إضافة ملفات "),
         elevation: 0.0,
@@ -224,12 +207,12 @@ void initState() {
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height/3,
+              height: MediaQuery.of(context).size.height / 3,
               child: GridView.count(
-                crossAxisCount: 3,
-                 crossAxisSpacing: 5.0,
-                mainAxisSpacing: 5.0,
-                children: LecureFiles.toSet().map((e) {
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5.0,
+                  mainAxisSpacing: 5.0,
+                  children: LecureFiles.toSet().map((e) {
                     if (e.path.endsWith("jpg") ||
                         e.path.endsWith("jpeg") ||
                         e.path.endsWith("pnf")) {
@@ -329,17 +312,13 @@ void initState() {
                         ],
                       );
                     }
-                  }).toList()
-           
-           
-              ),
+                  }).toList()),
             ),
-Spacer() ,
-        InkWell(
-                onTap: () async{
-
-              if (await serviceProvider.checkInternet()) {
-                LoadingDialog.show(context);
+            Spacer(),
+            InkWell(
+              onTap: () async {
+                if (await serviceProvider.checkInternet()) {
+                  LoadingDialog.show(context);
 
                   await UploadFilesToBackendless();
 //
@@ -378,10 +357,17 @@ Spacer() ,
                   print('notification status');
                   print(notification);
 
-                   LoadingDialog.hide(context);
+                  LoadingDialog.hide(context);
 
-                                     Get.back();
-
+                  Get.back();
+                  Fluttertoast.showToast(
+                      msg: " تمت اضافة المادة بنجاح",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.green,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
                 } else {
                   Fluttertoast.showToast(
                       msg: "تأكد من اتصال البيانات",
@@ -392,59 +378,59 @@ Spacer() ,
                       textColor: Colors.white,
                       fontSize: 16.0);
                 }
-
-
-
-                },
-                child: Container(
-                  width: 250,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.yellow),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("نشر المحاضرة",textAlign: TextAlign.center,),
+              },
+              child: Container(
+                width: 250,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.yellow),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "نشر المحاضرة",
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ) ,
-
-
-
-            
+              ),
+            ),
           ],
         ),
       ),
-
-
-      floatingActionButton: 
-      new FloatingActionButton(onPressed: (){
-
-_pickDocument();
-      } , 
-      
-      child: Icon(Icons.add),
-      
+      floatingActionButton: new FloatingActionButton(
+        onPressed: () {
+          _pickDocument();
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
- _pickDocument() async {
+
+  _pickDocument() async {
     try {
       FilePickerResult result = await FilePicker.platform.pickFiles(
           type: FileType.custom,
-          allowedExtensions: ['ppt', 'pdf', 'doc' , "pptx" ,  "png" ,"PNG" , "gif" ,  "jpg"   ,"jpeg" ,"JPEG"],
-
+          allowedExtensions: [
+            'ppt',
+            'pdf',
+            'doc',
+            "pptx",
+            "png",
+            "PNG",
+            "gif",
+            "jpg",
+            "jpeg",
+            "JPEG"
+          ],
           allowMultiple: true);
 
-          if (result != null) {
-       LecureFiles = result.paths.map((path) => File(path)).toList();
+      if (result != null) {
+        LecureFiles = result.paths.map((path) => File(path)).toList();
       } else {
-        LecureFiles =[];
+        LecureFiles = [];
       }
       // setState(() {
       //   LecureFiles.addAll(result.files);
       // });
-
-
 
     } catch (e) {
       print(e);
@@ -463,19 +449,16 @@ _pickDocument();
   }
 
   Future<void> UploadFilesToBackendless() async {
-          for (var file  in LecureFiles) {
-            var url = await Backendless.files.upload(File(file.path), 'lectures',
+    for (var file in LecureFiles) {
+      var url = await Backendless.files.upload(File(file.path), 'lectures',
           overwrite: true, onProgressUpdate: (value) {});
 
       FilesTouploads.add(url);
-          }
-
+    }
 
     // LecureFiles.forEach((file) async {
     //  print(file.path);
-      
-        
-    
+
     // print(url);
     // });
 
@@ -528,15 +511,19 @@ _pickDocument();
             'id': '1',
             'status': 'done',
             'screen': 'lecture_details',
-             'data':
-           {"id": lecture_data.data()['id'] , "type":'lecture'}
+            'data': {"id": lecture_data.data()['id'], "type": 'lecture'}
           },
           'to':
               '/topics/${widget.subject.department.dept_code}${widget.subject.level.id.toString()}'
         },
       ),
     );
-
+    Alert(
+      context: context,
+      title: "sucess",
+      desc: "Flutter is better with RFlutter Alert.",
+      image: Image.asset("assets/success.png"),
+    ).show();
     // final Completer<Map<String, dynamic>> completer =
     //    Completer<Map<String, dynamic>>();
 
@@ -550,14 +537,4 @@ _pickDocument();
 
     debugPrint(response.body);
   }
-
-
-
-
-
 }
-
-
-
-
-
