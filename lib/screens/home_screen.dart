@@ -18,6 +18,7 @@ import 'package:teacher_side/screens/login/login_view.dart';
 import 'package:teacher_side/screens/my_events.dart';
 import 'package:teacher_side/screens/my_lectures.dart';
 import 'package:teacher_side/screens/my_subjects.dart';
+import 'package:teacher_side/screens/notifcatin_page.dart';
 import 'package:teacher_side/screens/profile.dart';
 import 'package:teacher_side/screens/subject_details.dart';
 import 'package:teacher_side/screens/time_table.dart';
@@ -56,7 +57,6 @@ class _HomeState extends State<Home> {
   void _bottomSheetMore(context) {
     showModalBottomSheet(
       context: context,
-      
       builder: (builder) {
         return new Container(
           padding: EdgeInsets.only(
@@ -65,7 +65,7 @@ class _HomeState extends State<Home> {
             top: 5.0,
             bottom: 5.0,
           ),
-          margin: EdgeInsets.only(left: 5,  right: 5),
+          margin: EdgeInsets.only(left: 5, right: 5),
           decoration: new BoxDecoration(
               color: Colors.white,
               borderRadius: new BorderRadius.only(
@@ -226,6 +226,11 @@ class _HomeState extends State<Home> {
           elevation: 0.0,
           title: Text('الاستاذ'),
           actions: [
+            IconButton(
+                onPressed: () {
+                  Get.to(NotificationPage());
+                },
+                icon: Icon(Icons.notifications)),
             IconButton(
                 onPressed: () {
                   _bottomSheetMore(context);
@@ -407,10 +412,10 @@ class _HomeState extends State<Home> {
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/teaching.png') ,   fit:BoxFit.cover ),
+                                              'assets/images/teaching.png'),
+                                          fit: BoxFit.cover),
                                       shape: BoxShape.rectangle)),
                               Text('المحاضرات',
-
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
                           ),
@@ -427,17 +432,15 @@ class _HomeState extends State<Home> {
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
                                           image: AssetImage(
-                                              'assets/images/calendar.png') ,fit:BoxFit.cover ),
+                                              'assets/images/calendar.png'),
+                                          fit: BoxFit.cover),
                                       shape: BoxShape.rectangle)),
                               Text('الاعلانات',
                                   style: TextStyle(fontWeight: FontWeight.bold))
                             ],
                           ),
                         ),
-
-
-
-InkWell(
+                        InkWell(
                           onTap: () {
                             Get.to(MySubjects());
                           },
@@ -457,9 +460,7 @@ InkWell(
                             ],
                           ),
                         ),
-
-
-InkWell(
+                        InkWell(
                           onTap: () {
                             Get.to(WebSite());
                           },
@@ -479,8 +480,7 @@ InkWell(
                             ],
                           ),
                         ),
-
-InkWell(
+                        InkWell(
                           onTap: () {
                             Get.to(TimeTable());
                           },
@@ -500,9 +500,6 @@ InkWell(
                             ],
                           ),
                         ),
-
-
-                        
                       ]),
                 ),
               )
