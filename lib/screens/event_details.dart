@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:ui';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:flutter_filereader/flutter_filereader.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -13,9 +15,9 @@ import 'package:teacher_side/utils/days.dart';
 import 'package:uuid/uuid.dart';
 import 'package:uuid/uuid_util.dart';
 import 'package:http/http.dart' as http;
-class EventDeitals extends StatefulWidget {
 
-  final Map  data;
+class EventDeitals extends StatefulWidget {
+  final Map data;
   EventDeitals(this.data);
 
   @override
@@ -23,19 +25,17 @@ class EventDeitals extends StatefulWidget {
 }
 
 class _LectureDisscusionState extends State<EventDeitals> {
-TextEditingController _controller =  new TextEditingController();
+  TextEditingController _controller = new TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    get_teacher();
+    fetchSubjectData();
+  }
 
-
-
-@override
-void initState() { 
-  super.initState();
-  get_teacher();
-  fetchSubjectData();
-}
-ClassSubject classSubject;
-fetchSubjectData() async {
+  ClassSubject classSubject;
+  fetchSubjectData() async {
     var data = await FirebaseFirestore.instance
         .collection("subject")
         .where("id", isEqualTo: widget.data['id'])
@@ -47,67 +47,55 @@ fetchSubjectData() async {
       });
     }
   }
-Teacher teacher;
-get_teacher(){
-  setState(() {
-      teacher =  Teacher.fromJson(json.decode(getStorage.read('teacher')));
+
+  Teacher teacher;
+  get_teacher() {
+    setState(() {
+      teacher = Teacher.fromJson(json.decode(getStorage.read('teacher')));
     });
 
     debugPrint(widget.data['id']);
-
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
-     CollectionReference comments = FirebaseFirestore.instance.collection('comments');
+    CollectionReference comments =
+        FirebaseFirestore.instance.collection('comments');
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-    appBar: AppBar (title: Text('details '),  
-    
-    elevation: 0.0,
-    centerTitle: true,),
-
-   
-   body: ListView(
-
-children: [
-
-  Padding(padding: EdgeInsets.only(top: 8.0) ,
-  
-  child: Container(
-    width:double.infinity ,
-    height: 200.0,
-
-    decoration: BoxDecoration(
-      color: Theme.of(context).cardColor,
-
-    ),
-
-    child: Column(children: [
-Align(
-alignment: Alignment.topCenter,
-child: Text('${widget.data['name']}'),
-
-) ,
-
-Align(
-
-  alignment: Alignment.bottomLeft ,
-  child: widget.data['files'].length>0? 
-  
-  
-  
-  Container(
-    height: 100  ,
-    
-    child:ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: widget.data['files'].length,
-      itemBuilder: (BuildContext context, int index) {
-
-         var file =   widget.data['files'][index];
-                                  if (file.endsWith("jpg") ||
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text('details '),
+          elevation: 0.0,
+          centerTitle: true,
+        ),
+        body: ListView(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Container(
+                width: double.infinity,
+                height: 200.0,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                ),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Text('${widget.data['name']}'),
+                    ),
+                    Align(
+                        alignment: Alignment.bottomLeft,
+                        child: widget.data['files'].length > 0
+                            ? Container(
+                                height: 100,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: widget.data['files'].length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    var file = widget.data['files'][index];
+                                    if (file.endsWith("jpg") ||
                                         file.endsWith("jpeg") ||
                                         file.endsWith("png")) {
                                       return Stack(children: [
@@ -140,35 +128,39 @@ Align(
                                         children: [
                                           Container(
                                             height: 100,
-                                            child: 
-                                    Container(height: 80,child: Center(child: Text("PDF"),) 
-                                            // PDFView(
-                                            //   filePath: file,
-                                            //   enableSwipe: true,
-                                            //   swipeHorizontal: true,
-                                            //   autoSpacing: false,
-                                            //   pageFling: false,
-                                            //   onRender: (_pages) {
-                                            //     setState(() {});
-                                            //   },
-                                            //   onError: (error) {
-                                            //     print(error.toString());
-                                            //   },
-                                            //   onPageError: (page, error) {
-                                            //     print(
-                                            //         '$page: ${error.toString()}');
-                                            //   },
-                                            //   onViewCreated: (PDFViewController
-                                            //       pdfViewController) {
-                                            //     // _controller.complete(pdfViewController);
-                                            //   },
-                                            //   onPageChanged:
-                                            //       (int page, int total) {
-                                            //     print(
-                                            //         'page change: $page/$total');
-                                            //   },
-                                            // ),
-                                          ),),
+                                            child: Container(
+                                                height: 80,
+                                                child: Center(
+                                                  child: Text("PDF"),
+                                                )
+                                                // PDFView(
+                                                //   filePath: file,
+                                                //   enableSwipe: true,
+                                                //   swipeHorizontal: true,
+                                                //   autoSpacing: false,
+                                                //   pageFling: false,
+                                                //   onRender: (_pages) {
+                                                //     setState(() {});
+                                                //   },
+                                                //   onError: (error) {
+                                                //     print(error.toString());
+                                                //   },
+                                                //   onPageError: (page, error) {
+                                                //     print(
+                                                //         '$page: ${error.toString()}');
+                                                //   },
+                                                //   onViewCreated: (PDFViewController
+                                                //       pdfViewController) {
+                                                //     // _controller.complete(pdfViewController);
+                                                //   },
+                                                //   onPageChanged:
+                                                //       (int page, int total) {
+                                                //     print(
+                                                //         'page change: $page/$total');
+                                                //   },
+                                                // ),
+                                                ),
+                                          ),
                                           Positioned(
                                             top: 0,
                                             right: 0,
@@ -186,42 +178,48 @@ Align(
                                         ],
                                       );
                                     } else {
-                                      return Stack(
-                                        children: [
-                                          Container(
-                                            height: 100,
-                                            child: FileReaderView(
-                                              filePath: file,
+                                      return InkWell(
+                                        onTap: () async {
+                                          if (await canLaunch(file)) {
+                                            await launch(file);
+                                          } else {
+                                            throw 'Unable to open url : $file';
+                                          }
+                                        },
+                                        child: Stack(
+                                          children: [
+                                            Container(
+                                              height: 100,
+                                              child: FileReaderView(
+                                                filePath: file,
+                                              ),
                                             ),
-                                          ),
-                                          Positioned(
-                                            top: 0,
-                                            right: 0,
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  setState(() {
-                                                    // LecureFiles.remove(e);
-                                                  });
-                                                },
-                                                icon: Icon(
-                                                  Icons.highlight_off,
-                                                  color: Colors.red,
-                                                )),
-                                          ),
-                                        ],
-                                      );}
-                                 },
-
+                                            Positioned(
+                                              top: 0,
+                                              right: 0,
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      // LecureFiles.remove(e);
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.highlight_off,
+                                                    color: Colors.red,
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    }
+                                  },
 
 //         debugPrint(widget.data['files'][index]);
-  
+
 //         return
-
-
 
 // GestureDetector(
 //   onTap: (){
-
 
 //     Navigator.push(context, MaterialPageRoute(builder: (_){
 //   return Material(child: Hero(tag:  index.toString(), child: Container(
@@ -234,137 +232,103 @@ Align(
 //   },
 //   child: Image.network("${widget.data['files'][index]}"));
 
+                                  //     Container(
+                                  //       width:100,
+                                  // height: 100,
+                                  //       child: Image.network(widget.data['files'][index]));
 
+                                  //   Container(
+                                  //     height: 80,
+                                  //     width: 80,
 
-  //     Container(
-  //       width:100,
-  // height: 100,
-  //       child: Image.network(widget.data['files'][index]));
-    
-      
-   
-    //   Container(
-    //     height: 80,
-    //     width: 80,
-      
-    //     child: Card(
-          
-    //       child:Column(children: [
-    //         Text('file ${index+1}') ,
+                                  //     child: Card(
 
-    //         IconButton(icon: Icon(Icons.download_rounded), onPressed: (){
+                                  //       child:Column(children: [
+                                  //         Text('file ${index+1}') ,
 
-              
-    //         })
+                                  //         IconButton(icon: Icon(Icons.download_rounded), onPressed: (){
 
+                                  //         })
 
-    //       ],)
-    //     ),
-    //   );
-    //  },
-    ),
-  ) :   Column(
+                                  //       ],)
+                                  //     ),
+                                  //   );
+                                  //  },
+                                ),
+                              )
+                            : Column(
                                 children: [
                                   Image.asset(
                                       "assets/images/file_not_found.png"),
                                   Text("لا توجد ملفات ")
                                 ],
-                              )
+                              ))
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 10.0),
+            Text('التعليقات...',
+                style: TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold)),
+            Container(
+              height: MediaQuery.of(context).size.height * 2 / 3,
+              child: FutureBuilder<QuerySnapshot>(
+                future: comments
+                    .where('object_id', isEqualTo: widget.data['id'])
+                    .get(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
 
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("Loading");
+                  }
 
-)
-
-
-    ],),
-  ),
-  
-  ) ,
-
-  SizedBox(height:10.0) ,
-  Text('التعليقات...' ,  style: 
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  TextStyle(color: Colors.black ,  fontWeight: FontWeight.bold) ),
-Container(
-  height: MediaQuery.of(context).size.height*2/3,
-  child: FutureBuilder<QuerySnapshot>(
-    future: comments.where('object_id' ,isEqualTo: widget.data['id']).get(),
-
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-       if (snapshot.hasError) {
-          return Text('Something went wrong');
-        }
-
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
-        }
-   
-      return  ListView.builder(
-        itemCount: snapshot.data.docs.length,
-        itemBuilder: (BuildContext context, int index) {
-
-          return
-          Container(
-            
-                      margin: EdgeInsets.all(8.0),
+                  return ListView.builder(
+                    itemCount: snapshot.data.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        margin: EdgeInsets.all(8.0),
                         padding: EdgeInsets.all(8.0),
                         decoration: BoxDecoration(
-                             borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                                      color: Colors.green[200].withOpacity(0.5),
-
-                            
+                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                          color: Colors.green[200].withOpacity(0.5),
+                        ),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              title: Text(snapshot.data.docs[index]
+                                  .data()['commentator']['name']),
+                              subtitle: Text(snapshot.data.docs[index]
+                                  .data()['commentator']['role']),
                             ),
-            child: Column(
-              children: [
-                  ListTile(
-                    
-                            title: Text(snapshot.data.docs[index]
-                                .data()['commentator']['name']),
-                            subtitle: Text(snapshot.data.docs[index]
-                                .data()['commentator']['role']),
-                          ) ,
                             Text(
-                            snapshot.data.docs[index].data()['comment_text']
-                              , maxLines: 20,) ,
-                              SizedBox(height: 10.0,) ,
-                              // Text(snapshot.data.docs[index].data()['time'].toString()),
-                              dateFormatWidget( snapshot.data.docs[index].data()['time'])
-
-              ],
+                              snapshot.data.docs[index].data()['comment_text'],
+                              maxLines: 20,
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            // Text(snapshot.data.docs[index].data()['time'].toString()),
+                            dateFormatWidget(
+                                snapshot.data.docs[index].data()['time'])
+                          ],
+                        ),
+                      );
+                      return Text(snapshot.data.docs[index].data().toString());
+                    },
+                  );
+                },
+              ),
             ),
-          )
-         ;
-        return     Text(snapshot.data.docs[index].data().toString());
-       },
-      );
-    },
-  ),
-
-
-) ,
-
-
-
-
-
-],
-
-
-
-
-
-   ),
+          ],
+        ),
 // floatingActionButton: Container(
 //   height: 40,
 
-  
 //   decoration: BoxDecoration(
 //     borderRadius: BorderRadius.all(Radius.circular(20)),
 //     color: Colors.teal
@@ -373,31 +337,32 @@ Container(
 
 // ,
 // ),
- bottomNavigationBar: Padding(padding: MediaQuery.of(context).viewInsets,
-   child:TextField(
-    controller: _controller,
-    maxLines: 2,
-     decoration: InputDecoration(
-       
-     icon: IconButton(icon: Icon(Icons.comment ,  color: Colors.blue,), onPressed: () async{
-var uuid = Uuid(
-    options: {'grng': UuidUtil.cryptoRNG}
-);
-var data =   await comments.add({
-     'id':uuid.v1(),
-      'object_id': widget.data['id'],
-       'comment_text':  _controller.text ,
-       'time': Timestamp.now() ,
-       'commentator':  <dynamic ,dynamic>{
-         'id':teacher.id,
-         'name':teacher.name ,
-         'role':'أستاذ'
-       }
-
-
-   });
-    var response = await http.post(
-                      Uri.parse('https://fcm.googleapis.com/fcm/send')  ,
+        bottomNavigationBar: Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: TextField(
+            controller: _controller,
+            maxLines: 2,
+            decoration: InputDecoration(
+                icon: IconButton(
+                    icon: Icon(
+                      Icons.comment,
+                      color: Colors.blue,
+                    ),
+                    onPressed: () async {
+                      var uuid = Uuid(options: {'grng': UuidUtil.cryptoRNG});
+                      var data = await comments.add({
+                        'id': uuid.v1(),
+                        'object_id': widget.data['id'],
+                        'comment_text': _controller.text,
+                        'time': Timestamp.now(),
+                        'commentator': <dynamic, dynamic>{
+                          'id': teacher.id,
+                          'name': teacher.name,
+                          'role': 'أستاذ'
+                        }
+                      });
+                      var response = await http.post(
+                        Uri.parse('https://fcm.googleapis.com/fcm/send'),
                         headers: <String, String>{
                           'Content-Type': 'application/json',
                           'Authorization': 'key=$serverToken',
@@ -405,8 +370,7 @@ var data =   await comments.add({
                         body: jsonEncode(
                           <String, dynamic>{
                             'notification': <String, dynamic>{
-                              'body':
-                                  'تم االتعليق    من قبل الاستاذ ',
+                              'body': 'تم االتعليق    من قبل الاستاذ ',
                               'title': ':تم إضافة تعليق'
                             },
                             'priority': 'high',
@@ -415,45 +379,40 @@ var data =   await comments.add({
                               'id': '1',
                               'status': 'done',
                               'screen': 'consults',
-                              'data':<String ,String>{
-                                "type":"event" ,
-                                "id":
-                              widget.data['id'].toString()}
+                              'data': <String, String>{
+                                "type": "event_comment",
+                                "id": widget.data['id'].toString()
+                              }
                             },
-                            'to':
-                                '/topics/event${widget.data['id']}'
+                            'to': '/topics/event${widget.data['id']}'
                           },
                         ),
                       );
-     _controller.text='';
-        print('comment');
-      }),   
-       hintText: 'تعليق...'  ,  hintStyle: TextStyle(color: Colors.black)
-     ),
-     
-   ), 
-  )
-    );
+                      _controller.text = '';
+                      print('comment');
+                    }),
+                hintText: 'تعليق...',
+                hintStyle: TextStyle(color: Colors.black)),
+          ),
+        ));
   }
 
-
-
-        DateTime convertTimeStampToDateTime(int timeStamp) {
-     var dateToTimeStamp = DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
-     return dateToTimeStamp;
-   }
+  DateTime convertTimeStampToDateTime(int timeStamp) {
+    var dateToTimeStamp = DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
+    return dateToTimeStamp;
+  }
 
   String convertTimeStampToHumanDate(int timeStamp) {
     var dateToTimeStamp = DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
     return DateFormat('dd/MM/yyyy').format(dateToTimeStamp);
   }
 
-   String convertTimeStampToHumanHour(int timeStamp) {
-     var dateToTimeStamp = DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
-     return DateFormat('HH:mm').format(dateToTimeStamp);
-   }
+  String convertTimeStampToHumanHour(int timeStamp) {
+    var dateToTimeStamp = DateTime.fromMillisecondsSinceEpoch(timeStamp * 1000);
+    return DateFormat('HH:mm').format(dateToTimeStamp);
+  }
 
-Widget dateFormatWidget(Timestamp timestamp) {
+  Widget dateFormatWidget(Timestamp timestamp) {
     DateTime date = timestamp.toDate();
     // var now = DateTime.now();
     // var nowDay = now.weekday;
@@ -489,7 +448,4 @@ Widget dateFormatWidget(Timestamp timestamp) {
     //   child: Text(getDayText(nowDay, day)),
     // );
   }
-  }
-
-
-
+}

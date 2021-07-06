@@ -110,7 +110,7 @@ main(List<String> args) async {
         user: user,
       ));
     } else {
-      if (data['type'] == "event") {
+      if (data['type'] == "event_comment") {
         Get.to(EventComments(data['id']));
       }
       Get.to(LectureComments(data['id']));

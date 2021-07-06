@@ -162,7 +162,7 @@ class _MyHomePageState extends State<ChatPage> {
 
                               <String, dynamic>{
                                 'notification': <String, dynamic>{
-                                  'body': _controller.text,
+                                  'body': "${_controller.text}",
                                   'title': ' ${widget.me.name}  استاذ'
                                 },
                                 'priority': 'high',
@@ -211,7 +211,7 @@ class _MyHomePageState extends State<ChatPage> {
 
                               <String, dynamic>{
                                 'notification': <String, dynamic>{
-                                  'body': _controller.text,
+                                  'body': "${_controller.text}",
                                   'title': ' ${widget.me.name}  استاذ'
                                 },
                                 'priority': 'high',
