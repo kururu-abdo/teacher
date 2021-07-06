@@ -45,13 +45,11 @@ class _NotificationPageState extends State<NotificationPage> {
                     child: InkWell(
                       onTap: () {
                         debugPrint(item.object);
-                        var object = json.decode(item.object);
-                        var data = json.decode(object["data"]);
-                        debugPrint(object.toString());
+                        var data = json.decode(item.object);
                         //chat
                         if (data["type"] == "message") {
-                          var me = User.fromJson(data["receiver"]);
-                          var user = User.fromJson(data["sender"]);
+                          var me = User.fromJson(json.decode(data["receiver"]));
+                          var user = User.fromJson(json.decode(data["sender"]));
                           Get.to(ChatPage(me: me, user: user));
                         }
                         //event

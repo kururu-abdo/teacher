@@ -60,7 +60,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
         // ),
         // null
       ),
-      payload: json.encode(message.data['data']));
+      payload: json.encode(message.data));
   DBProvider.db.newNotification(LocalNotification(
       title: notification.title,
       object: json.encode(message.data),
