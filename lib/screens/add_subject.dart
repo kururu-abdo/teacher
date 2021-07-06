@@ -508,10 +508,10 @@ class _AddFilesToLecureState extends State<AddFilesToLecure> {
           'priority': 'high',
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'id': '1',
             'status': 'done',
             'screen': 'lecture_details',
-            'data': {"id": lecture_data.data()['id'], "type": 'lecture'}
+            "id": lecture_data.data()['id'],
+            "type": 'lecture'
           },
           'to':
               '/topics/${widget.subject.department.dept_code}${widget.subject.level.id.toString()}'

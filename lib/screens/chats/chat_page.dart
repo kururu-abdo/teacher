@@ -171,11 +171,9 @@ class _MyHomePageState extends State<ChatPage> {
                                   'id': '1',
                                   'status': 'done',
                                   'screen': 'chat',
-                                  'data': <dynamic, dynamic>{
-                                    'sender': widget.me.toJson(),
-                                    'receiver': widget.user.toJson(),
-                                    "type": "message"
-                                  }
+                                  'sender': widget.me.toJson(),
+                                  'receiver': widget.user.toJson(),
+                                  "type": "message"
                                 },
                                 'to': '/topics/${widget.user.id.toString()}'
                               },
@@ -220,11 +218,9 @@ class _MyHomePageState extends State<ChatPage> {
                                   'id': '1',
                                   'status': 'done',
                                   'screen': 'chat',
-                                  'data': <dynamic, dynamic>{
-                                    'sender': widget.me.toJson(),
-                                    'receiver': widget.user.toJson(),
-                                    "type": "message"
-                                  }
+                                  'sender': widget.me.toJson(),
+                                  'receiver': widget.user.toJson(),
+                                  "type": "message"
                                 },
                                 'to':
                                     '/topics/supervisor${widget.user.id.toString()}'

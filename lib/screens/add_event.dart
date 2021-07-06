@@ -541,11 +541,9 @@ Spacer()
           'priority': 'high',
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'id': '1',
             'status': 'done',
             'screen': 'event_details',
-            'data':
-           {"id": event_data.data()['id'] , "type":'event'}
+           "id": event_data.data()['id'] , "type":'event'
           },
           'to':
               '/topics/${widget.data['dept']['name']}${widget.data['level']['name']}'

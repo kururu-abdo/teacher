@@ -100,7 +100,7 @@ class FCMConfig {
               // ),
               // null
             ),
-            payload: json.encode(message.data['data']));
+            payload: json.encode(message.data));
       }
     });
 
