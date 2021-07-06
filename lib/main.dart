@@ -103,8 +103,8 @@ main(List<String> args) async {
     var data = json.decode(payload);
 
     if (data['type'] == "message") {
-      var me = User.fromJson(data['receiver']);
-      var user = User.fromJson(data['sender']);
+      var me = User.fromJson(json.decode(data['receiver']));
+      var user = User.fromJson(json.decode(data['sender']));
       Get.to(ChatPage(
         me: me,
         user: user,
